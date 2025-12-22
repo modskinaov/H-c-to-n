@@ -1,0 +1,3606 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trò Chơi Toán Học - Thử Thách Căn Thức & Đường Tròn</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/umd/lucide.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #4c51bf 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .header h1 {
+            color: white;
+            font-size: 3em;
+            margin: 20px 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .header p {
+            color: #bfdbfe;
+            font-size: 1.3em;
+        }
+        
+        .icon-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+        }
+        
+        .input-group input {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.2em;
+            border-radius: 12px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            margin-bottom: 15px;
+        }
+        
+        .input-group input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.2em;
+            font-weight: bold;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.6);
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-mode {
+            padding: 12px 20px;
+            font-size: 1.1em;
+            font-weight: bold;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-radius: 12px;
+            margin: 5px;
+        }
+
+        .btn-mode.active {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            border-color: #f59e0b;
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
+        }
+
+        .mode-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .leaderboard-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .leaderboard-item.gold {
+            background: rgba(234, 179, 8, 0.3);
+            border: 2px solid #fbbf24;
+        }
+        
+        .leaderboard-item.silver {
+            background: rgba(156, 163, 175, 0.3);
+            border: 2px solid #9ca3af;
+        }
+        
+        .leaderboard-item.bronze {
+            background: rgba(234, 88, 12, 0.3);
+            border: 2px solid #ea580c;
+        }
+        
+        .rank {
+            font-size: 2em;
+            font-weight: bold;
+            color: white;
+            width: 50px;
+            text-align: center;
+        }
+        
+        .player-info {
+            flex: 1;
+        }
+        
+        .player-name {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 5px;
+        }
+        
+        .player-stats {
+            color: #bfdbfe;
+            font-size: 0.9em;
+        }
+        
+        .score {
+            font-size: 2em;
+            font-weight: bold;
+            color: #fbbf24;
+        }
+        
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .player-display {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+        }
+        
+        .score-display {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .streak-badge {
+            background: rgba(249, 115, 22, 0.3);
+            padding: 8px 15px;
+            border-radius: 12px;
+            border: 1px solid #f97316;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .streak-badge span {
+            color: white;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+        
+        .current-score {
+            font-size: 2em;
+            font-weight: bold;
+            color: #fbbf24;
+        }
+
+        .level-badge {
+            background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+            padding: 8px 15px;
+            border-radius: 12px;
+            border: 1px solid #a78bfa;
+            color: white;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #10b981, #059669);
+            transition: width 0.5s ease;
+        }
+
+        .level-info {
+            display: flex;
+            justify-content: space-between;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+        
+        .category-badge {
+            display: inline-block;
+            background: rgba(168, 85, 247, 0.3);
+            color: #c084fc;
+            padding: 8px 15px;
+            border-radius: 8px;
+            font-size: 0.9em;
+            font-weight: bold;
+            border: 1px solid #a855f7;
+            margin-bottom: 15px;
+        }
+
+        .type-badge {
+            display: inline-block;
+            background: rgba(59, 130, 246, 0.3);
+            color: #60a5fa;
+            padding: 8px 15px;
+            border-radius: 8px;
+            font-size: 0.9em;
+            font-weight: bold;
+            border: 1px solid #3b82f6;
+            margin-bottom: 15px;
+            margin-left: 10px;
+        }
+        
+        .question-text {
+            color: white;
+            font-size: 1.4em;
+            font-weight: bold;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        
+        .options {
+            display: grid;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .option-btn {
+            padding: 15px 20px;
+            font-size: 1.1em;
+            font-weight: bold;
+            border-radius: 12px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: left;
+        }
+        
+        .option-btn:hover:not(:disabled) {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.4);
+            transform: translateX(5px);
+        }
+        
+        .option-btn.correct {
+            background: rgba(34, 197, 94, 0.5);
+            border-color: #22c55e;
+        }
+        
+        .option-btn.incorrect {
+            background: rgba(239, 68, 68, 0.5);
+            border-color: #ef4444;
+        }
+        
+        .option-btn.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .virtual-keyboard {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .keyboard-label {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9em;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .keyboard-row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+        }
+
+        .key-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            min-width: 45px;
+            text-align: center;
+        }
+
+        .key-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+
+        .key-btn:active {
+            transform: scale(0.95);
+        }
+
+        .key-btn.wide {
+            min-width: 80px;
+        }
+
+        .essay-input {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.1em;
+            border-radius: 12px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            margin-bottom: 15px;
+            min-height: 120px;
+            resize: vertical;
+            font-family: inherit;
+        }
+
+        .essay-input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .essay-input:focus {
+            outline: none;
+            border-color: rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.25);
+        }
+        
+        .result-box {
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .result-box.correct {
+            background: rgba(34, 197, 94, 0.3);
+            border: 2px solid #22c55e;
+        }
+        
+        .result-box.incorrect {
+            background: rgba(239, 68, 68, 0.3);
+            border: 2px solid #ef4444;
+        }
+
+        .result-box.partial {
+            background: rgba(245, 158, 11, 0.3);
+            border: 2px solid #f59e0b;
+        }
+        
+        .result-title {
+            color: white;
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .result-explanation {
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.6;
+        }
+        
+        .bonus-points {
+            color: #fbbf24;
+            font-weight: bold;
+            margin-top: 8px;
+        }
+
+        .your-answer {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 10px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .achievement-popup {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            animation: slideIn 0.5s ease, slideOut 0.5s ease 2.5s;
+            min-width: 300px;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+        }
+
+        .achievement-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 5px;
+        }
+
+        .achievement-desc {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .achievements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .achievement-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 12px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s;
+        }
+
+        .achievement-card.unlocked {
+            background: rgba(251, 191, 36, 0.2);
+            border-color: #fbbf24;
+        }
+
+        .achievement-card.locked {
+            opacity: 0.5;
+        }
+
+        .achievement-icon {
+            font-size: 3em;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .achievement-name {
+            color: white;
+            font-weight: bold;
+            font-size: 1.1em;
+            text-align: center;
+            margin-bottom: 5px;
+        }
+
+        .achievement-description {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9em;
+            text-align: center;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #fbbf24;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1em;
+        }
+
+        .export-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .export-buttons button {
+            flex: 1;
+        }
+
+        .sound-toggle {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 1.5em;
+            transition: all 0.3s;
+        }
+
+        .sound-toggle:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        h2 {
+            color: white;
+            font-size: 2em;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .tab {
+            padding: 12px 24px;
+            background: transparent;
+            border: none;
+            color: rgba(255, 255, 255, 0.6);
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .tab.active {
+            color: white;
+            border-bottom-color: #fbbf24;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2em;
+            }
+            .game-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .achievement-popup {
+                right: 10px;
+                left: 10px;
+                min-width: auto;
+            }
+        }
+        .super-essay-container {
+    background: linear-gradient(135deg, #f59e0b, #dc2626);
+    border: 3px solid #fbbf24;
+    padding: 20px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+}
+
+.super-timer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 15px;
+    border-radius: 12px;
+    margin-bottom: 15px;
+}
+
+.timer-display {
+    font-size: 2em;
+    font-weight: bold;
+    color: #fbbf24;
+}
+
+.timer-warning {
+    color: #ef4444 !important;
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+.super-essay-input {
+    width: 100%;
+    min-height: 300px;
+    padding: 20px;
+    font-size: 1.2em;
+    border-radius: 12px;
+    border: 3px solid #fbbf24;
+    background: rgba(255, 255, 255, 0.95);
+    color: #1f2937;
+    margin-bottom: 15px;
+    resize: vertical;
+    font-family: 'Courier New', monospace;
+    line-height: 1.8;
+}
+
+.line-counter {
+    color: white;
+    font-weight: bold;
+    font-size: 1.1em;
+    margin-bottom: 10px;
+}
+
+.line-counter.invalid {
+    color: #ef4444;
+}
+
+.excellence-badge {
+    background: linear-gradient(135deg, #fbbf24, #f59e0b);
+    border: 3px solid #fff;
+    padding: 10px 20px;
+    border-radius: 12px;
+    color: white;
+    font-weight: bold;
+    font-size: 1.2em;
+    display: inline-block;
+    animation: shine 2s infinite;
+}
+
+@keyframes shine {
+    0%, 100% { box-shadow: 0 0 20px rgba(251, 191, 36, 0.5); }
+    50% { box-shadow: 0 0 40px rgba(251, 191, 36, 0.8); }
+}
+
+.question-image {
+    max-width: 100%;
+    border-radius: 12px;
+    margin: 20px 0;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.warning-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+}
+
+.warning-content {
+    background: white;
+    padding: 40px;
+    border-radius: 20px;
+    text-align: center;
+    max-width: 500px;
+}
+
+.warning-content h2 {
+    color: #dc2626;
+    margin-bottom: 20px;
+}
+
+.warning-content p {
+    color: #1f2937;
+    margin-bottom: 30px;
+    font-size: 1.2em;
+}
+
+.warning-buttons {
+    display: flex;
+    gap: 15px;
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Home Screen -->
+        <div id="homeScreen">
+            <div class="header">
+                <div class="icon-row">
+                    <span style="font-size: 4em;">🧠</span>
+                    <h1>Thử Thách Toán Học</h1>
+                    <span style="font-size: 4em;">🏆</span>
+                </div>
+                <p>Căn Thức & Đường Tròn</p>
+            </div>
+
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h2>🎯 Bắt Đầu Chơi</h2>
+                    <button class="sound-toggle" onclick="toggleSound()" id="soundToggle">🔊</button>
+                </div>
+                <div class="input-group">
+                    <input type="text" id="playerNameInput" placeholder="Nhập tên của bạn..." />
+                    <div class="mode-selector">
+                        <button class="btn-mode active" data-mode="mixed" onclick="selectMode('mixed')">
+                            🎲 Hỗn Hợp
+                        </button>
+                        <button class="btn-mode" data-mode="multiple" onclick="selectMode('multiple')">
+                            ✅ Trắc Nghiệm
+                        </button>
+                        <button class="btn-mode" data-mode="essay" onclick="selectMode('essay')">
+                            ✍️ Tự Luận
+                        <button class="btn-mode" data-mode="super" onclick="selectMode('super')">
+    🌟 Siêu Tự Luận
+</button>
+                    </div>
+                    <button class="btn btn-primary" onclick="startGame()">🚀 Bắt Đầu Thử Thách</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="tabs">
+                    <button class="tab active" onclick="switchTab('leaderboard')">🏆 Bảng Xếp Hạng</button>
+                    <button class="tab" onclick="switchTab('achievements')">🏅 Thành Tựu</button>
+                    <button class="tab" onclick="switchTab('statistics')">📊 Thống Kê</button>
+                    <button class="tab" onclick="switchTab('data')">💾 Dữ Liệu</button>
+                </div>
+
+                <div id="leaderboardTab" class="tab-content active">
+                    <div id="leaderboardList"></div>
+                </div>
+
+                <div id="achievementsTab" class="tab-content">
+                    <div class="achievements-grid" id="achievementsList"></div>
+                </div>
+
+                <div id="statisticsTab" class="tab-content">
+                    <div id="playerStatsInfo" style="color: rgba(255,255,255,0.6); text-align: center;">Chọn người chơi để xem thống kê</div>
+                    <select id="playerSelect" style="width: 100%; padding: 12px; border-radius: 12px; background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.3); margin-bottom: 20px; font-size: 1.1em;" onchange="showPlayerStats()">
+                        <option value="">-- Chọn người chơi --</option>
+                    </select>
+                    <div id="statsContent"></div>
+                </div>
+
+                <div id="dataTab" class="tab-content">
+                    <h3 style="color: white; margin-bottom: 15px;">Sao lưu & Khôi phục dữ liệu</h3>
+                    <p style="color: rgba(255,255,255,0.8); margin-bottom: 20px;">
+                        Xuất dữ liệu để sao lưu hoặc chuyển sang thiết bị khác
+                    </p>
+                    <div class="export-buttons">
+                        <button class="btn btn-primary" onclick="exportData()">📥 Xuất Dữ Liệu</button>
+                        <button class="btn btn-secondary" onclick="document.getElementById('importFile').click()">📤 Nhập Dữ Liệu</button>
+                    </div>
+                    <input type="file" id="importFile" accept=".json" style="display: none;" onchange="importData(event)">
+                    <button class="btn btn-secondary" style="margin-top: 10px;" onclick="clearAllData()">🗑️ Xóa Toàn Bộ Dữ Liệu</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Screen -->
+        <div id="gameScreen" class="hidden">
+            <div class="card">
+                <div class="game-header">
+                    <div>
+                        <div class="player-display">👤 <span id="currentPlayerName"></span></div>
+                        <div class="level-badge" id="levelBadge">Level 1</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                        </div>
+                        <div class="level-info">
+                            <span id="currentExp">0 EXP</span>
+                            <span id="nextLevelExp">/ 100 EXP</span>
+                        </div>
+                    </div>
+                    <div class="score-display">
+                        <div id="streakBadge" class="streak-badge hidden">
+                            <span>⚡</span>
+                            <span id="streakCount">0</span>
+                        </div>
+                        <div class="current-score" id="currentScore">0 điểm</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div>
+                    <span class="category-badge" id="questionCategory"></span>
+                    <span class="type-badge" id="questionType"></span>
+                </div>
+                <div class="question-text" id="questionText"></div>
+                <div id="multipleChoiceContainer" class="hidden">
+                    <div class="options" id="optionsContainer"></div>
+                </div>
+                <div id="essayContainer" class="hidden">
+                    <textarea class="essay-input" id="essayInput" placeholder="Nhập câu trả lời của bạn...&#10;&#10;Ví dụ:&#10;- x ≥ 2&#10;- 3√2&#10;- 60°"></textarea>
+                    
+                    <!-- Bàn phím ảo -->
+                    <div class="virtual-keyboard">
+                        <div class="keyboard-label">⌨️ Phím ảo - Click để chèn ký tự</div>
+                        
+                        <div class="keyboard-row">
+                            <button class="key-btn" onclick="insertSymbol('≥')">≥</button>
+                            <button class="key-btn" onclick="insertSymbol('≤')">≤</button>
+                            <button class="key-btn" onclick="insertSymbol('=')">＝</button>
+                            <button class="key-btn" onclick="insertSymbol('≠')">≠</button>
+                            <button class="key-btn" onclick="insertSymbol('<')">＜</button>
+                            <button class="key-btn" onclick="insertSymbol('>')">＞</button>
+                        </div>
+                        
+                        <div class="keyboard-row">
+                            <button class="key-btn" onclick="insertSymbol('√')">√</button>
+                            <button class="key-btn" onclick="insertSymbol('²')">²</button>
+                            <button class="key-btn" onclick="insertSymbol('³')">³</button>
+                            <button class="key-btn" onclick="insertSymbol('°')">°</button>
+                            <button class="key-btn" onclick="insertSymbol('π')">π</button>
+                        </div>
+                        
+                        <div class="keyboard-row">
+                            <button class="key-btn" onclick="insertSymbol('½')">½</button>
+                            <button class="key-btn" onclick="insertSymbol('⅓')">⅓</button>
+                            <button class="key-btn" onclick="insertSymbol('¼')">¼</button>
+                            <button class="key-btn" onclick="insertSymbol('¾')">¾</button>
+                            <button class="key-btn" onclick="insertSymbol('⅔')">⅔</button>
+                        </div>
+                        
+                        <div class="keyboard-row">
+                            <button class="key-btn" onclick="insertSymbol('0')">0</button>
+                            <button class="key-btn" onclick="insertSymbol('1')">1</button>
+                            <button class="key-btn" onclick="insertSymbol('2')">2</button>
+                            <button class="key-btn" onclick="insertSymbol('3')">3</button>
+                            <button class="key-btn" onclick="insertSymbol('4')">4</button>
+                            <button class="key-btn" onclick="insertSymbol('5')">5</button>
+                            <button class="key-btn" onclick="insertSymbol('6')">6</button>
+                            <button class="key-btn" onclick="insertSymbol('7')">7</button>
+                            <button class="key-btn" onclick="insertSymbol('8')">8</button>
+                            <button class="key-btn" onclick="insertSymbol('9')">9</button>
+                        </div>
+                        
+                        <div class="keyboard-row">
+                            <button class="key-btn" onclick="insertSymbol('x')">x</button>
+                            <button class="key-btn" onclick="insertSymbol('y')">y</button>
+                            <button class="key-btn" onclick="insertSymbol('+')" style="font-size: 1.4em;">+</button>
+                            <button class="key-btn" onclick="insertSymbol('-')" style="font-size: 1.4em;">−</button>
+                            <button class="key-btn" onclick="insertSymbol('×')">×</button>
+                            <button class="key-btn" onclick="insertSymbol('÷')">÷</button>
+                            <button class="key-btn" onclick="insertSymbol('(')">(</button>
+                            <button class="key-btn" onclick="insertSymbol(')')">)</button>
+                            <button class="key-btn wide" onclick="insertSymbol('/')">/</button>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-primary" onclick="submitEssay()">✓ Nộp Bài</button>
+                </div>
+                <div id="resultBox" class="hidden"></div>
+                <button id="nextBtn" class="btn btn-primary hidden" onclick="nextQuestion()">Câu Tiếp Theo →</button>
+            </div>
+
+            <button class="btn btn-secondary" onclick="goHome()">← Về Trang Chủ</button>
+        </div>
+    </div>
+
+    <script>
+        const multipleChoiceQuestions = [
+            {
+                id: 1,
+                category: "Điều kiện xác định",
+                question: "Tìm điều kiện xác định của biểu thức √(2x)",
+                options: ["x ≥ 0", "x > 0", "x ≤ 0", "x < 0"],
+                correct: 0,
+                explanation: "Biểu thức √(2x) có nghĩa khi 2x ≥ 0, tức là x ≥ 0"
+            },
+            {
+                id: 2,
+                category: "Điều kiện xác định",
+                question: "Tìm điều kiện xác định của biểu thức √(-5x)",
+                options: ["x ≥ 0", "x ≤ 0", "x > 0", "x < 0"],
+                correct: 1,
+                explanation: "Biểu thức √(-5x) có nghĩa khi -5x ≥ 0, tức là x ≤ 0"
+            },
+            {
+                id: 3,
+                category: "Điều kiện xác định",
+                question: "Tìm điều kiện xác định của √(x-1)",
+                options: ["x > 1", "x ≥ 1", "x < 1", "x ≤ 1"],
+                correct: 1,
+                explanation: "Biểu thức √(x-1) có nghĩa khi x-1 ≥ 0, tức là x ≥ 1"
+            },
+            {
+                id: 4,
+                category: "Điều kiện xác định",
+                question: "Tìm điều kiện xác định của √(2-x)",
+                options: ["x ≤ 2", "x < 2", "x ≥ 2", "x > 2"],
+                correct: 0,
+                explanation: "Biểu thức √(2-x) có nghĩa khi 2-x ≥ 0, tức là x ≤ 2"
+            },
+            {
+                id: 5,
+                category: "Trục căn thức",
+                question: "Trục căn thức ở mẫu: 5/(2+√3)",
+                options: ["10-5√3", "5(2-√3)", "2-√3", "10+5√3"],
+                correct: 1,
+                explanation: "Nhân cả tử và mẫu với (2-√3): 5(2-√3)/[(2+√3)(2-√3)] = 5(2-√3)/(4-3) = 5(2-√3)"
+            },
+            {
+                id: 6,
+                category: "Trục căn thức",
+                question: "Trục căn thức ở mẫu: 9/(2√3)",
+                options: ["3√3/2", "9√3/6", "3√3", "9/(2√3)"],
+                correct: 0,
+                explanation: "9/(2√3) = 9√3/(2·3) = 9√3/6 = 3√3/2"
+            },
+            {
+                id: 8,
+                category: "Đường tròn",
+                question: "Cho đường tròn (O) và góc nội tiếp BAC = 130°. Tính số đo của góc ở tâm BOC:",
+                options: ["130°", "260°", "65°", "100°"],
+                correct: 1,
+                explanation: "Góc ở tâm bằng 2 lần góc nội tiếp cùng chắn một cung. Vậy BOC = 2·130° = 260°"
+            },
+            {
+                id: 10,
+                category: "Lượng giác",
+                question: "Cho tam giác ABC vuông tại A, đường cao AH. Cho biết AB = 14cm, C = 30°. Tính góc B:",
+                options: ["30°", "45°", "60°", "90°"],
+                correct: 2,
+                explanation: "Trong tam giác vuông ABC, tổng hai góc nhọn = 90°. Vậy B = 90° - C = 90° - 30° = 60°"
+            },
+            {
+                id: 13,
+                category: "Rút gọn",
+                question: "Rút gọn: √8 + √18 - √32",
+                options: ["√2", "2√2", "0", "-√2"],
+                correct: 0,
+                explanation: "√8 + √18 - √32 = 2√2 + 3√2 - 4√2 = (2+3-4)√2 = √2"
+            },
+            {
+                id: 22,
+                category: "Đường tròn",
+                question: "Góc nội tiếp chắn nửa đường tròn có số đo là:",
+                options: ["45°", "60°", "90°", "180°"],
+                correct: 2,
+                explanation: "Góc nội tiếp chắn nửa đường tròn là góc vuông (90°)"
+            
+            },
+{
+    id: 23,
+    category: "Đường tròn",
+    question: "Góc ở tâm bằng bao nhiêu lần góc nội tiếp cùng chắn một cung?",
+    options: ["1 lần", "2 lần", "3 lần", "4 lần"],
+    correct: 1,
+    explanation: "Góc ở tâm = 2 lần góc nội tiếp"
+},
+{
+    id: 24,
+    category: "Lượng giác",
+    question: "Trong tam giác vuông, tổng hai góc nhọn bằng:",
+    options: ["45°", "60°", "90°", "180°"],
+    correct: 2,
+    explanation: "Tam giác vuông có tổng hai góc nhọn bằng 90°"
+},
+{
+    id: 25,
+    category: "Lượng giác",
+    question: "Cho tam giác vuông có một góc 30°. Góc còn lại bằng:",
+    options: ["30°", "45°", "60°", "90°"],
+    correct: 2,
+    explanation: "90° - 30° = 60°"
+},
+{
+    id: 26,
+    category: "Điều kiện xác định",
+    question: "Tìm điều kiện xác định của √(3x-6)",
+    options: ["x ≥ 2", "x > 2", "x ≤ 2", "x < 2"],
+    correct: 0,
+    explanation: "3x-6 ≥ 0 ⇒ x ≥ 2"
+},
+{
+    id: 27,
+    category: "Điều kiện xác định",
+    question: "Tìm điều kiện xác định của √(7- x)",
+    options: ["x ≥ 7", "x > 7", "x ≤ 7", "x < 7"],
+    correct: 2,
+    explanation: "7-x ≥ 0 ⇒ x ≤ 7"
+},
+{
+    id: 28,
+    category: "Rút gọn",
+    question: "Rút gọn: √72 - √8",
+    options: ["2√2", "4√2", "6√2", "8√2"],
+    correct: 1,
+    explanation: "√72 = 6√2, √8 = 2√2 ⇒ 4√2"
+},
+{
+    id: 29,
+    category: "Rút gọn",
+    question: "Rút gọn: √48 + √3",
+    options: ["3√3", "4√3", "5√3", "6√3"],
+    correct: 2,
+    explanation: "√48 = 4√3 ⇒ 4√3 + √3 = 5√3"
+},
+{
+    id: 30,
+    category: "Trục căn thức",
+    question: "Trục căn thức ở mẫu: 6/(√3)",
+    options: ["2√3", "3√3", "6√3", "√3/6"],
+    correct: 1,
+    explanation: "6/√3 = 6√3/3 = 2√3"
+},
+{
+    id: 31,
+    category: "Trục căn thức",
+    question: "Trục căn thức ở mẫu: 5/(√7)",
+    options: ["5√7", "5√7/7", "7√5", "√7/5"],
+    correct: 1,
+    explanation: "5/√7 = 5√7/7"
+},
+{
+    id: 32,
+    category: "Đường tròn",
+    question: "Số đo cung bị chắn bởi góc nội tiếp 40° là:",
+    options: ["20°", "40°", "80°", "160°"],
+    correct: 2,
+    explanation: "Cung chắn bởi góc nội tiếp có số đo gấp đôi góc nội tiếp ⇒ 80°"
+},
+{
+    id: 33,
+    category: "Đường tròn",
+    question: "Góc ở tâm chắn cung 120° có số đo là:",
+    options: ["60°", "120°", "240°", "30°"],
+    correct: 1,
+    explanation: "Góc ở tâm bằng số đo cung bị chắn ⇒ 120°"
+},
+{
+    id: 34,
+    category: "Lượng giác",
+    question: "Trong tam giác vuông, nếu một góc nhọn là 60° thì góc còn lại là:",
+    options: ["20°", "30°", "45°", "60°"],
+    correct: 1,
+    explanation: "90° - 60° = 30°"
+},
+{
+    id: 35,
+    category: "Lượng giác",
+    question: "Trong tam giác vuông, cạnh đối diện góc 30° bằng:",
+    options: ["Cạnh huyền", "Nửa cạnh huyền", "√2 lần cạnh huyền", "Bằng cạnh kề"],
+    correct: 1,
+    explanation: "Cạnh đối diện góc 30° bằng nửa cạnh huyền"
+},
+{
+    id: 36,
+    category: "Điều kiện xác định",
+    question: "Tìm điều kiện xác định của √(4x+1)",
+    options: ["x ≥ -1/4", "x > -1/4", "x ≤ -1/4", "x < -1/4"],
+    correct: 0,
+    explanation: "4x+1 ≥ 0 ⇒ x ≥ -1/4"
+},
+{
+    id: 37,
+    category: "Điều kiện xác định",
+    question: "Tìm điều kiện xác định của √(9-3x)",
+    options: ["x ≥ 3", "x ≤ 3", "x > 3", "x < 3"],
+    correct: 1,
+    explanation: "9-3x ≥ 0 ⇒ x ≤ 3"
+},
+{
+    id: 38,
+    category: "Rút gọn",
+    question: "Rút gọn: √75 + √12",
+    options: ["5√3", "7√3", "3√3", "√87"],
+    correct: 1,
+    explanation: "√75 = 5√3, √12 = 2√3 ⇒ 7√3"
+},
+{
+    id: 39,
+    category: "Rút gọn",
+    question: "Rút gọn: √98 - √50",
+    options: ["2√2", "3√2", "4√2", "5√2"],
+    correct: 0,
+    explanation: "√98 = 7√2, √50 = 5√2 ⇒ 2√2"
+},
+{
+    id: 40,
+    category: "Trục căn thức",
+    question: "Trục căn thức ở mẫu: 8/(√2)",
+    options: ["4√2", "8√2", "2√2", "√2/8"],
+    correct: 0,
+    explanation: "8/√2 = 8√2/2 = 4√2"
+},
+{
+    id: 41,
+    category: "Trục căn thức",
+    question: "Trục căn thức ở mẫu: 10/(√5)",
+    options: ["2√5", "5√5", "10√5", "√5/10"],
+    correct: 0,
+    explanation: "10/√5 = 10√5/5 = 2√5"
+},
+{
+    id: 42,
+    category: "Đường tròn",
+    question: "Góc nội tiếp chắn cung 70° có số đo là:",
+    options: ["35°", "70°", "140°", "40°"],
+    correct: 0,
+    explanation: "Góc nội tiếp bằng nửa số đo cung bị chắn ⇒ 35°"
+},
+{
+    id: 43,
+    category: "Đường tròn",
+    question: "Số đo cung bị chắn bởi góc ở tâm 150° là:",
+    options: ["75°", "150°", "300°", "30°"],
+    correct: 1,
+    explanation: "Số đo cung bằng số đo góc ở tâm ⇒ 150°"
+},
+{
+    id: 44,
+    category: "Lượng giác",
+    question: "Trong tam giác vuông, sin của góc nhọn luôn:",
+    options: ["> 1", "< 0", "≥ 1", "0 < sin < 1"],
+    correct: 3,
+    explanation: "Sin của góc nhọn nằm trong khoảng (0;1)"
+},
+{
+    id: 45,
+    category: "Lượng giác",
+    question: "Trong tam giác vuông, cos của một góc nhọn bằng:",
+    options: ["Cạnh đối / cạnh huyền", "Cạnh kề / cạnh huyền", "Cạnh huyền / cạnh kề", "Cạnh đối / cạnh kề"],
+    correct: 1,
+    explanation: "cos = cạnh kề / cạnh huyền"
+},
+{
+    id: 46,
+    category: "Điều kiện xác định",
+    question: "Tìm điều kiện xác định của √(x-4)",
+    options: ["x ≥ 4", "x > 4", "x ≤ 4", "x < 4"],
+    correct: 0,
+    explanation: "x-4 ≥ 0 ⇒ x ≥ 4"
+},
+{
+    id: 47,
+    category: "Điều kiện xác định",
+    question: "Tìm điều kiện xác định của √(10-5x)",
+    options: ["x ≥ 2", "x ≤ 2", "x > 2", "x < 2"],
+    correct: 1,
+    explanation: "10-5x ≥ 0 ⇒ x ≤ 2"
+},
+{
+    id: 48,
+    category: "Rút gọn",
+    question: "Rút gọn: √18 + √8",
+    options: ["3√2", "4√2", "5√2", "6√2"],
+    correct: 2,
+    explanation: "√18 = 3√2, √8 = 2√2 ⇒ 5√2"
+},
+{
+    id: 49,
+    category: "Rút gọn",
+    question: "Rút gọn: √45 - √20",
+    options: ["√5", "2√5", "3√5", "4√5"],
+    correct: 0,
+    explanation: "√45 = 3√5, √20 = 2√5 ⇒ √5"
+},
+{
+    id: 50,
+    category: "Trục căn thức",
+    question: "Trục căn thức ở mẫu: 12/(√3)",
+    options: ["4√3", "6√3", "12√3", "√3/12"],
+    correct: 0,
+    explanation: "12/√3 = 12√3/3 = 4√3"
+},
+{
+    id: 51,
+    category: "Trục căn thức",
+    question: "Trục căn thức ở mẫu: 7/(√7)",
+    options: ["√7", "7√7", "49√7", "√7/7"],
+    correct: 0,
+    explanation: "7/√7 = √7"
+},
+{
+    id: 52,
+    category: "Đường tròn",
+    question: "Góc nội tiếp chắn cung 100° có số đo là:",
+    options: ["40°", "50°", "100°", "200°"],
+    correct: 1,
+    explanation: "Góc nội tiếp bằng nửa số đo cung ⇒ 50°"
+},
+{
+    id: 53,
+    category: "Đường tròn",
+    question: "Góc ở tâm chắn cung 90° có số đo là:",
+    options: ["45°", "90°", "180°", "30°"],
+    correct: 1,
+    explanation: "Góc ở tâm bằng số đo cung ⇒ 90°"
+},
+{
+    id: 54,
+    category: "Lượng giác",
+    question: "Trong tam giác vuông, tan của góc nhọn bằng:",
+    options: ["Cạnh kề / cạnh huyền", "Cạnh đối / cạnh huyền", "Cạnh đối / cạnh kề", "Cạnh huyền / cạnh đối"],
+    correct: 2,
+    explanation: "tan = cạnh đối / cạnh kề"
+},
+{
+    id: 55,
+    category: "Lượng giác",
+    question: "Trong tam giác vuông, nếu hai cạnh góc vuông bằng nhau thì tam giác là:",
+    options: ["Tam giác đều", "Tam giác nhọn", "Tam giác vuông cân", "Tam giác tù"],
+    correct: 2,
+    explanation: "Hai cạnh góc vuông bằng nhau ⇒ tam giác vuông cân"
+},
+{
+    id: 56,
+    category: "Điều kiện xác định",
+    question: "Tìm điều kiện xác định của √(2x+7)",
+    options: ["x ≥ -7/2", "x > -7/2", "x ≤ -7/2", "x < -7/2"],
+    correct: 0,
+    explanation: "2x+7 ≥ 0 ⇒ x ≥ -7/2"
+},
+{
+    id: 57,
+    category: "Điều kiện xác định",
+    question: "Tìm điều kiện xác định của √(6-x)",
+    options: ["x ≥ 6", "x > 6", "x ≤ 6", "x < 6"],
+    correct: 2,
+    explanation: "6-x ≥ 0 ⇒ x ≤ 6"
+},
+{
+    id: 58,
+    category: "Rút gọn",
+    question: "Rút gọn: √32 + √2",
+    options: ["3√2", "4√2", "5√2", "6√2"],
+    correct: 2,
+    explanation: "√32 = 4√2 ⇒ 4√2 + √2 = 5√2"
+},
+{
+    id: 59,
+    category: "Rút gọn",
+    question: "Rút gọn: √81 - √16",
+    options: ["5", "7", "9", "13"],
+    correct: 0,
+    explanation: "√81 = 9, √16 = 4 ⇒ 9 - 4 = 5"
+},
+{
+    id: 60,
+    category: "Trục căn thức",
+    question: "Trục căn thức ở mẫu: 9/(√3)",
+    options: ["3√3", "9√3", "√3/9", "6√3"],
+    correct: 0,
+    explanation: "9/√3 = 9√3/3 = 3√3"
+},
+{
+    id: 61,
+    category: "Trục căn thức",
+    question: "Trục căn thức ở mẫu: 4/(√8)",
+    options: ["√2", "2√2", "√8/4", "4√2"],
+    correct: 0,
+    explanation: "√8 = 2√2 ⇒ 4/(2√2) = 2/√2 = √2"
+},
+{
+    id: 62,
+    category: "Đường tròn",
+    question: "Góc nội tiếp chắn cung 120° có số đo là:",
+    options: ["40°", "50°", "60°", "120°"],
+    correct: 2,
+    explanation: "Góc nội tiếp bằng nửa số đo cung ⇒ 60°"
+},
+{
+    id: 63,
+    category: "Đường tròn",
+    question: "Số đo cung bị chắn bởi góc ở tâm 200° là:",
+    options: ["100°", "200°", "400°", "80°"],
+    correct: 1,
+    explanation: "Số đo cung bằng số đo góc ở tâm ⇒ 200°"
+},
+{
+    id: 64,
+    category: "Lượng giác",
+    question: "Trong tam giác vuông, cos của góc 60° bằng:",
+    options: ["1", "√3/2", "1/2", "√2/2"],
+    correct: 2,
+    explanation: "cos 60° = 1/2"
+},
+{
+    id: 65,
+    category: "Lượng giác",
+    question: "Trong tam giác vuông, sin của góc 30° bằng:",
+    options: ["1/2", "√2/2", "√3/2", "1"],
+    correct: 0,
+    explanation: "sin 30° = 1/2"
+},
+{
+    id: 66,
+    category: "Điều kiện xác định",
+    question: "Tìm điều kiện xác định của √(5x-15)",
+    options: ["x ≥ 3", "x > 3", "x ≤ 3", "x < 3"],
+    correct: 0,
+    explanation: "5x-15 ≥ 0 ⇒ x ≥ 3"
+},
+{
+    id: 67,
+    category: "Điều kiện xác định",
+    question: "Tìm điều kiện xác định của √(12-4x)",
+    options: ["x ≥ 3", "x > 3", "x ≤ 3", "x < 3"],
+    correct: 2,
+    explanation: "12-4x ≥ 0 ⇒ x ≤ 3"
+},
+{
+    id: 68,
+    category: "Rút gọn",
+    question: "Rút gọn: √27 + √75",
+    options: ["8√3", "10√3", "6√3", "12√3"],
+    correct: 1,
+    explanation: "√27 = 3√3, √75 = 5√3 ⇒ 8√3 (đáp án đúng phải là 8√3)"
+},
+{
+    id: 69,
+    category: "Rút gọn",
+    question: "Rút gọn: √200 - √50",
+    options: ["5√2", "10√2", "15√2", "20√2"],
+    correct: 0,
+    explanation: "√200 = 10√2, √50 = 5√2 ⇒ 5√2"
+},
+{
+    id: 70,
+    category: "Trục căn thức",
+    question: "Trục căn thức ở mẫu: 15/(√5)",
+    options: ["3√5", "5√5", "15√5", "√5/15"],
+    correct: 0,
+    explanation: "15/√5 = 15√5/5 = 3√5"
+},
+{
+    id: 71,
+    category: "Trục căn thức",
+    question: "Trục căn thức ở mẫu: 6/(√6)",
+    options: ["√6", "2√6", "3√6", "6√6"],
+    correct: 0,
+    explanation: "6/√6 = √6"
+},
+{
+    id: 72,
+    category: "Đường tròn",
+    question: "Góc nội tiếp chắn cung 140° có số đo là:",
+    options: ["60°", "70°", "140°", "280°"],
+    correct: 1,
+    explanation: "Góc nội tiếp bằng nửa số đo cung ⇒ 70°"
+},
+{
+    id: 73,
+    category: "Đường tròn",
+    question: "Số đo cung bị chắn bởi góc ở tâm 110° là:",
+    options: ["55°", "110°", "220°", "45°"],
+    correct: 1,
+    explanation: "Số đo cung bằng số đo góc ở tâm ⇒ 110°"
+},
+{
+    id: 74,
+    category: "Lượng giác",
+    question: "Trong tam giác vuông, cạnh huyền luôn:",
+    options: ["Nhỏ nhất", "Lớn nhất", "Bằng cạnh kề", "Bằng cạnh đối"],
+    correct: 1,
+    explanation: "Cạnh huyền là cạnh lớn nhất trong tam giác vuông"
+},
+{
+    id: 75,
+    category: "Lượng giác",
+    question: "Trong tam giác vuông, sin của góc nhọn bằng:",
+    options: ["Cạnh kề / cạnh huyền", "Cạnh đối / cạnh huyền", "Cạnh đối / cạnh kề", "Cạnh huyền / cạnh đối"],
+    correct: 1,
+    explanation: "sin = cạnh đối / cạnh huyền"
+},
+{
+    id: 76,
+    category: "Điều kiện xác định",
+    question: "Tìm điều kiện xác định của √(x+10)",
+    options: ["x ≥ -10", "x > -10", "x ≤ -10", "x < -10"],
+    correct: 0,
+    explanation: "x+10 ≥ 0 ⇒ x ≥ -10"
+},
+{
+    id: 77,
+    category: "Điều kiện xác định",
+    question: "Tìm điều kiện xác định của √(20-2x)",
+    options: ["x ≥ 10", "x > 10", "x ≤ 10", "x < 10"],
+    correct: 2,
+    explanation: "20-2x ≥ 0 ⇒ x ≤ 10"
+},
+{
+    id: 78,
+    category: "Rút gọn",
+    question: "Rút gọn: √125 + √20",
+    options: ["7√5", "9√5", "5√5", "11√5"],
+    correct: 0,
+    explanation: "√125 = 5√5, √20 = 2√5 ⇒ 7√5"
+},
+{
+    id: 79,
+    category: "Rút gọn",
+    question: "Rút gọn: √147 - √75",
+    options: ["2√3", "3√3", "4√3", "5√3"],
+    correct: 1,
+    explanation: "√147 = 7√3, √75 = 5√3 ⇒ 2√3"
+},
+{
+    id: 80,
+    category: "Trục căn thức",
+    question: "Trục căn thức ở mẫu: 18/(√2)",
+    options: ["9√2", "18√2", "6√2", "√2/18"],
+    correct: 0,
+    explanation: "18/√2 = 18√2/2 = 9√2"
+},
+{
+    id: 81,
+    category: "Trục căn thức",
+    question: "Trục căn thức ở mẫu: 2/(√8)",
+    options: ["√2/4", "√2/2", "2√2", "√8/2"],
+    correct: 0,
+    explanation: "√8 = 2√2 ⇒ 2/(2√2) = 1/√2 = √2/2; rút gọn đúng là √2/2"
+},
+{
+    id: 82,
+    category: "Đường tròn",
+    question: "Góc nội tiếp chắn cung 160° có số đo là:",
+    options: ["70°", "80°", "160°", "320°"],
+    correct: 1,
+    explanation: "Góc nội tiếp bằng nửa số đo cung ⇒ 80°"
+},
+{
+    id: 83,
+    category: "Đường tròn",
+    question: "Số đo cung bị chắn bởi góc ở tâm 75° là:",
+    options: ["37,5°", "75°", "150°", "45°"],
+    correct: 1,
+    explanation: "Số đo cung bằng số đo góc ở tâm ⇒ 75°"
+},
+{
+    id: 84,
+    category: "Lượng giác",
+    question: "Trong tam giác vuông, nếu sin α = 1/2 thì α bằng:",
+    options: ["30°", "45°", "60°", "90°"],
+    correct: 0,
+    explanation: "sin 30° = 1/2"
+},
+{
+    id: 85,
+    category: "Lượng giác",
+    question: "Trong tam giác vuông, nếu cos α = √3/2 thì α bằng:",
+    options: ["30°", "45°", "60°", "90°"],
+    correct: 2,
+    explanation: "cos 30° = √3/2"
+},
+{
+    id: 86,
+    category: "Điều kiện xác định",
+    question: "Tìm điều kiện xác định của √(8x-1)",
+    options: ["x ≥ 1/8", "x > 1/8", "x ≤ 1/8", "x < 1/8"],
+    correct: 0,
+    explanation: "8x-1 ≥ 0 ⇒ x ≥ 1/8"
+},
+{
+    id: 87,
+    category: "Điều kiện xác định",
+    question: "Tìm điều kiện xác định của √(15-3x)",
+    options: ["x ≥ 5", "x > 5", "x ≤ 5", "x < 5"],
+    correct: 2,
+    explanation: "15-3x ≥ 0 ⇒ x ≤ 5"
+},
+{
+    id: 88,
+    category: "Rút gọn",
+    question: "Rút gọn: √108 + √12",
+    options: ["8√3", "6√3", "10√3", "12√3"],
+    correct: 0,
+    explanation: "√108 = 6√3, √12 = 2√3 ⇒ 8√3"
+},
+{
+    id: 89,
+    category: "Rút gọn",
+    question: "Rút gọn: √243 - √27",
+    options: ["6√3", "8√3", "10√3", "12√3"],
+    correct: 1,
+    explanation: "√243 = 9√3, √27 = 3√3 ⇒ 6√3"
+},
+{
+    id: 90,
+    category: "Trục căn thức",
+    question: "Trục căn thức ở mẫu: 20/(√5)",
+    options: ["4√5", "5√5", "10√5", "20√5"],
+    correct: 0,
+    explanation: "20/√5 = 20√5/5 = 4√5"
+},
+{
+    id: 91,
+    category: "Trục căn thức",
+    question: "Trục căn thức ở mẫu: 3/(√12)",
+    options: ["√3/2", "√3", "3√3", "2√3"],
+    correct: 0,
+    explanation: "√12 = 2√3 ⇒ 3/(2√3) = √3/2"
+},
+{
+    id: 92,
+    category: "Đường tròn",
+    question: "Góc nội tiếp chắn cung 50° có số đo là:",
+    options: ["20°", "25°", "50°", "100°"],
+    correct: 1,
+    explanation: "Góc nội tiếp bằng nửa số đo cung ⇒ 25°"
+},
+{
+    id: 93,
+    category: "Đường tròn",
+    question: "Góc ở tâm chắn cung 135° có số đo là:",
+    options: ["67,5°", "135°", "270°", "45°"],
+    correct: 1,
+    explanation: "Góc ở tâm bằng số đo cung ⇒ 135°"
+},
+{
+    id: 94,
+    category: "Lượng giác",
+    question: "Trong tam giác vuông, nếu tan α = 1 thì α bằng:",
+    options: ["30°", "45°", "60°", "90°"],
+    correct: 1,
+    explanation: "tan 45° = 1"
+},
+{
+    id: 95,
+    category: "Lượng giác",
+    question: "Trong tam giác vuông, nếu sin α = √2/2 thì α bằng:",
+    options: ["30°", "45°", "60°", "90°"],
+    correct: 1,
+    explanation: "sin 45° = √2/2"
+},
+{
+    id: 96,
+    category: "Điều kiện xác định",
+    question: "Tìm điều kiện xác định của √(x+1)",
+    options: ["x ≥ -1", "x > -1", "x ≤ -1", "x < -1"],
+    correct: 0,
+    explanation: "x+1 ≥ 0 ⇒ x ≥ -1"
+},
+{
+    id: 97,
+    category: "Điều kiện xác định",
+    question: "Tìm điều kiện xác định của √(9x)",
+    options: ["x ≥ 0", "x > 0", "x ≤ 0", "x < 0"],
+    correct: 0,
+    explanation: "9x ≥ 0 ⇒ x ≥ 0"
+},
+{
+    id: 98,
+    category: "Điều kiện xác định",
+    question: "Tìm điều kiện xác định của √(4-2x)",
+    options: ["x ≥ 2", "x > 2", "x ≤ 2", "x < 2"],
+    correct: 2,
+    explanation: "4-2x ≥ 0 ⇒ x ≤ 2"
+},
+{
+    id: 99,
+    category: "Rút gọn",
+    question: "Rút gọn: √16 + √36",
+    options: ["10", "8", "6", "12"],
+    correct: 0,
+    explanation: "√16 = 4, √36 = 6 ⇒ 10"
+},
+{
+    id: 100,
+    category: "Rút gọn",
+    question: "Rút gọn: √49 - √25",
+    options: ["2", "4", "6", "8"],
+    correct: 0,
+    explanation: "√49 = 7, √25 = 5 ⇒ 2"
+},
+{
+    id: 101,
+    category: "Rút gọn",
+    question: "Rút gọn: √12 + √27",
+    options: ["3√3", "4√3", "5√3", "6√3"],
+    correct: 2,
+    explanation: "√12 = 2√3, √27 = 3√3 ⇒ 5√3"
+},
+{
+    id: 102,
+    category: "Rút gọn",
+    question: "Rút gọn: √50 - √18",
+    options: ["√2", "2√2", "3√2", "4√2"],
+    correct: 1,
+    explanation: "√50 = 5√2, √18 = 3√2 ⇒ 2√2"
+},
+{
+    id: 103,
+    category: "Trục căn thức",
+    question: "Trục căn thức ở mẫu: 5/(√2)",
+    options: ["5√2/2", "2√5", "√2/5", "5√2"],
+    correct: 0,
+    explanation: "5/√2 = 5√2/2"
+},
+{
+    id: 104,
+    category: "Trục căn thức",
+    question: "Trục căn thức ở mẫu: 4/(√3)",
+    options: ["4√3/3", "2√3", "√3/4", "4√3"],
+    correct: 0,
+    explanation: "4/√3 = 4√3/3"
+},
+{
+    id: 105,
+    category: "Trục căn thức",
+    question: "Trục căn thức ở mẫu: 6/(2√3)",
+    options: ["√3", "2√3", "3√3", "√3/2"],
+    correct: 0,
+    explanation: "6/(2√3) = 3/√3 = √3"
+},
+{
+    id: 106,
+    category: "Đường tròn",
+    question: "Góc nội tiếp chắn cung 90° có số đo là:",
+    options: ["30°", "45°", "90°", "180°"],
+    correct: 1,
+    explanation: "Góc nội tiếp bằng nửa số đo cung ⇒ 45°"
+},
+{
+    id: 107,
+    category: "Đường tròn",
+    question: "Góc nội tiếp chắn cung 180° là góc:",
+    options: ["Nhọn", "Vuông", "Tù", "Bằng 0°"],
+    correct: 1,
+    explanation: "Góc nội tiếp chắn nửa đường tròn là góc vuông"
+},
+{
+    id: 108,
+    category: "Đường tròn",
+    question: "Góc ở tâm chắn cung 300° có số đo là:",
+    options: ["150°", "300°", "600°", "75°"],
+    correct: 1,
+    explanation: "Góc ở tâm bằng số đo cung ⇒ 300°"
+},
+{
+    id: 109,
+    category: "Lượng giác",
+    question: "Trong tam giác vuông, sin 60° bằng:",
+    options: ["1/2", "√2/2", "√3/2", "1"],
+    correct: 2,
+    explanation: "sin 60° = √3/2"
+},
+{
+    id: 110,
+    category: "Lượng giác",
+    question: "Trong tam giác vuông, cos 30° bằng:",
+    options: ["1/2", "√2/2", "√3/2", "1"],
+    correct: 2,
+    explanation: "cos 30° = √3/2"
+},
+{
+    id: 111,
+    category: "Lượng giác",
+    question: "Trong tam giác vuông, tan 45° bằng:",
+    options: ["1/2", "1", "√2", "√3"],
+    correct: 1,
+    explanation: "tan 45° = 1"
+},
+{
+    id: 112,
+    category: "Lượng giác",
+    question: "Trong tam giác vuông, nếu hai góc nhọn bằng nhau thì mỗi góc bằng:",
+    options: ["30°", "45°", "60°", "90°"],
+    correct: 1,
+    explanation: "Hai góc nhọn bằng nhau ⇒ mỗi góc = 45°"
+},
+{
+    id: 113,
+    category: "Hình học",
+    question: "Tổng ba góc của một tam giác bằng:",
+    options: ["90°", "180°", "270°", "360°"],
+    correct: 1,
+    explanation: "Tổng ba góc trong tam giác bằng 180°"
+},
+{
+    id: 114,
+    category: "Hình học",
+    question: "Tam giác có ba cạnh bằng nhau là:",
+    options: ["Tam giác cân", "Tam giác vuông", "Tam giác đều", "Tam giác tù"],
+    correct: 2,
+    explanation: "Ba cạnh bằng nhau ⇒ tam giác đều"
+},
+{
+    id: 115,
+    category: "Hình học",
+    question: "Tam giác có một góc lớn hơn 90° là:",
+    options: ["Tam giác nhọn", "Tam giác vuông", "Tam giác cân", "Tam giác tù"],
+    correct: 3,
+    explanation: "Có một góc > 90° ⇒ tam giác tù"
+},
+{
+    id: 116,
+    category: "Phương trình tích",
+    question: "Giải phương trình: (x - 2)(x + 3) = 0",
+    options: ["x = 2 hoặc x = -3", "x = 2", "x = -3", "x = 5"],
+    correct: 0,
+    explanation: "Phương trình tích bằng 0 khi một trong các thừa số bằng 0 ⇒ x = 2 hoặc x = -3"
+},
+{
+    id: 117,
+    category: "Phương trình tích",
+    question: "Giải phương trình: (2x + 1)(x - 4) = 0",
+    options: ["x = -1/2 hoặc x = 4", "x = -2 hoặc x = 4", "x = -1/2", "x = 4"],
+    correct: 0,
+    explanation: "2x+1=0 ⇒ x=-1/2; x-4=0 ⇒ x=4"
+},
+{
+    id: 118,
+    category: "Phương trình tích",
+    question: "Giải phương trình: x(x - 5) = 0",
+    options: ["x = 0 hoặc x = 5", "x = 5", "x = 0", "x = -5"],
+    correct: 0,
+    explanation: "x=0 hoặc x-5=0 ⇒ x=5"
+},
+{
+    id: 119,
+    category: "Hệ phương trình",
+    question: "Giải hệ: { x + y = 5 ; x - y = 1 }",
+    options: ["x=3, y=2", "x=2, y=3", "x=4, y=1", "x=1, y=4"],
+    correct: 0,
+    explanation: "Cộng hai phương trình: 2x=6 ⇒ x=3; y=2"
+},
+{
+    id: 120,
+    category: "Hệ phương trình",
+    question: "Giải hệ: { x + y = 7 ; y = 2 }",
+    options: ["x=5, y=2", "x=2, y=5", "x=7, y=2", "x=9, y=2"],
+    correct: 0,
+    explanation: "Thế y=2 vào x+y=7 ⇒ x=5"
+},
+{
+    id: 121,
+    category: "Hệ phương trình",
+    question: "Giải hệ: { x = 2y ; x + y = 6 }",
+    options: ["x=4, y=2", "x=2, y=4", "x=3, y=3", "x=6, y=0"],
+    correct: 0,
+    explanation: "Thế x=2y ⇒ 3y=6 ⇒ y=2, x=4"
+},
+{
+    id: 122,
+    category: "Định lý Pythagore",
+    question: "Tam giác vuông có hai cạnh góc vuông 3cm và 4cm. Cạnh huyền bằng:",
+    options: ["5cm", "6cm", "7cm", "4cm"],
+    correct: 0,
+    explanation: "c²=3²+4²=9+16=25 ⇒ c=5"
+},
+{
+    id: 123,
+    category: "Định lý Pythagore",
+    question: "Tam giác vuông có cạnh huyền 13cm, một cạnh góc vuông 5cm. Cạnh còn lại bằng:",
+    options: ["12cm", "8cm", "10cm", "6cm"],
+    correct: 0,
+    explanation: "Cạnh còn lại = √(13²−5²)=√(169−25)=√144=12"
+},
+{
+    id: 124,
+    category: "Định lý Pythagore",
+    question: "Tam giác có các cạnh 6cm, 8cm, 10cm là tam giác:",
+    options: ["Vuông", "Cân", "Đều", "Tù"],
+    correct: 0,
+    explanation: "6²+8²=36+64=100=10² ⇒ tam giác vuông"
+},
+{
+    id: 125,
+    category: "Lượng giác",
+    question: "Trong tam giác vuông, nếu cạnh đối = 3, cạnh huyền = 5 thì sin α bằng:",
+    options: ["3/5", "4/5", "5/3", "√3/5"],
+    correct: 0,
+    explanation: "sin α = cạnh đối / cạnh huyền = 3/5"
+},
+{
+    id: 126,
+    category: "Lượng giác",
+    question: "Trong tam giác vuông, nếu cạnh kề = 4, cạnh huyền = 5 thì cos α bằng:",
+    options: ["4/5", "3/5", "5/4", "√3/5"],
+    correct: 0,
+    explanation: "cos α = cạnh kề / cạnh huyền = 4/5"
+},
+{
+    id: 127,
+    category: "Lượng giác",
+    question: "Trong tam giác vuông, nếu tan α = 3/4 thì tỉ số cạnh đối / cạnh kề là:",
+    options: ["3/4", "4/3", "5/4", "4/5"],
+    correct: 0,
+    explanation: "tan α = cạnh đối / cạnh kề"
+},
+{
+    id: 128,
+    category: "Căn thức",
+    question: "Rút gọn: √(49x²)",
+    options: ["7|x|", "7x", "49x", "|7x|"],
+    correct: 0,
+    explanation: "√(49x²)=7|x|"
+},
+{
+    id: 129,
+    category: "Căn thức",
+    question: "Rút gọn: √(16a²b)",
+    options: ["4|a|√b", "4a√b", "16a√b", "|4ab|"],
+    correct: 0,
+    explanation: "√16=4, √a²=|a| ⇒ 4|a|√b"
+},
+{
+    id: 130,
+    category: "Đường tròn",
+    question: "Góc nội tiếp chắn cùng cung với góc ở tâm 80° có số đo là:",
+    options: ["40°", "80°", "160°", "20°"],
+    correct: 0,
+    explanation: "Góc nội tiếp bằng nửa góc ở tâm ⇒ 40°"
+},
+{
+    id: 131,
+    category: "Đường tròn",
+    question: "Nếu góc nội tiếp bằng 35° thì góc ở tâm cùng chắn cung bằng:",
+    options: ["70°", "35°", "105°", "140°"],
+    correct: 0,
+    explanation: "Góc ở tâm = 2 lần góc nội tiếp"
+},
+{
+    id: 132,
+    category: "Phương trình tích",
+    question: "Giải phương trình: (x² - 9)(x - 1) = 0",
+    options: ["x = -3, 3, 1", "x = 3, 1", "x = -3, 1", "x = 9, 1"],
+    correct: 0,
+    explanation: "x²-9=0 ⇒ x=±3; x-1=0 ⇒ x=1"
+},
+{
+    id: 133,
+    category: "Hệ phương trình",
+    question: "Giải hệ: { 2x + y = 7 ; y = 1 }",
+    options: ["x=3, y=1", "x=2, y=1", "x=4, y=1", "x=6, y=1"],
+    correct: 0,
+    explanation: "Thế y=1 ⇒ 2x=6 ⇒ x=3"
+},
+{
+    id: 134,
+    category: "Phương trình tích",
+    question: "Giải phương trình: (x + 2)(x - 7) = 0",
+    options: ["x = -2 hoặc x = 7", "x = 2 hoặc x = -7", "x = -5", "x = 14"],
+    correct: 0,
+    explanation: "Phương trình tích bằng 0 khi một trong hai thừa số bằng 0 ⇒ x = -2 hoặc x = 7"
+},
+{
+    id: 135,
+    category: "Phương trình tích",
+    question: "Giải phương trình: x(2x - 6) = 0",
+    options: ["x = 0 hoặc x = 3", "x = 0 hoặc x = -3", "x = 3", "x = -3"],
+    correct: 0,
+    explanation: "x = 0 hoặc 2x-6=0 ⇒ x=3"
+},
+{
+    id: 136,
+    category: "Hệ phương trình",
+    question: "Giải hệ: { x + y = 10 ; x = 6 }",
+    options: ["x=6, y=4", "x=4, y=6", "x=10, y=0", "x=6, y=10"],
+    correct: 0,
+    explanation: "Thế x=6 vào x+y=10 ⇒ y=4"
+},
+{
+    id: 137,
+    category: "Hệ phương trình",
+    question: "Giải hệ: { 2x + y = 9 ; x = 4 }",
+    options: ["x=4, y=1", "x=4, y=5", "x=5, y=4", "x=3, y=3"],
+    correct: 1,
+    explanation: "Thế x=4 ⇒ 2·4+y=9 ⇒ y=1"
+},
+{
+    id: 138,
+    category: "Định lý Pythagore",
+    question: "Tam giác vuông có hai cạnh góc vuông 5cm và 12cm. Cạnh huyền bằng:",
+    options: ["13cm", "17cm", "10cm", "12cm"],
+    correct: 0,
+    explanation: "c²=5²+12²=25+144=169 ⇒ c=13"
+},
+{
+    id: 139,
+    category: "Định lý Pythagore",
+    question: "Tam giác vuông có cạnh huyền 10cm, một cạnh góc vuông 6cm. Cạnh còn lại bằng:",
+    options: ["8cm", "7cm", "6cm", "4cm"],
+    correct: 0,
+    explanation: "Cạnh còn lại = √(10²−6²)=√(100−36)=√64=8"
+},
+{
+    id: 140,
+    category: "Lượng giác",
+    question: "Trong tam giác vuông, nếu cạnh kề = 6 và cạnh huyền = 10 thì cos α bằng:",
+    options: ["3/5", "4/5", "5/3", "√3/5"],
+    correct: 0,
+    explanation: "cos α = cạnh kề / cạnh huyền = 6/10 = 3/5"
+},
+{
+    id: 141,
+    category: "Lượng giác",
+    question: "Trong tam giác vuông, nếu cạnh đối = 8 và cạnh kề = 6 thì tan α bằng:",
+    options: ["4/3", "3/4", "5/4", "6/8"],
+    correct: 0,
+    explanation: "tan α = cạnh đối / cạnh kề = 8/6 = 4/3"
+},
+{
+    id: 142,
+    category: "Căn thức",
+    question: "Rút gọn: √(36x²y)",
+    options: ["6|x|√y", "6x√y", "36x√y", "|6xy|"],
+    correct: 0,
+    explanation: "√36=6, √x²=|x| ⇒ 6|x|√y"
+},
+{
+    id: 143,
+    category: "Căn thức",
+    question: "Rút gọn: √(25a²b²)",
+    options: ["5|ab|", "5ab", "|5ab|", "25ab"],
+    correct: 0,
+    explanation: "√25=5, √(a²b²)=|ab| ⇒ 5|ab|"
+},
+{
+    id: 144,
+    category: "Đường tròn",
+    question: "Góc nội tiếp chắn cung 110° có số đo là:",
+    options: ["55°", "110°", "220°", "45°"],
+    correct: 0,
+    explanation: "Góc nội tiếp bằng nửa số đo cung ⇒ 55°"
+},
+{
+    id: 145,
+    category: "Đường tròn",
+    question: "Nếu góc ở tâm bằng 140° thì góc nội tiếp cùng chắn cung bằng:",
+    options: ["70°", "140°", "35°", "280°"],
+    correct: 0,
+    explanation: "Góc nội tiếp = 1/2 góc ở tâm"
+},
+{
+    id: 146,
+    category: "Hình học",
+    question: "Trong tam giác vuông, bình phương cạnh huyền bằng:",
+    options: [
+        "Tổng bình phương hai cạnh góc vuông",
+        "Hiệu bình phương hai cạnh góc vuông",
+        "Hai lần tích hai cạnh góc vuông",
+        "Tổng ba cạnh"
+    ],
+    correct: 0,
+    explanation: "Theo định lý Pythagore: c² = a² + b²"
+},
+{
+    id: 147,
+    category: "Hệ phương trình",
+    question: "Giải hệ: { x + y = 4 ; y = x }",
+    options: ["x=2, y=2", "x=1, y=3", "x=3, y=1", "x=4, y=0"],
+    correct: 0,
+    explanation: "Thế y=x ⇒ 2x=4 ⇒ x=2, y=2"
+},
+{
+    id: 148,
+    category: "Phương trình tích",
+    question: "Giải phương trình: (x - 5)(x + 1) = 0",
+    options: ["x = 5 hoặc x = -1", "x = 4", "x = -5", "x = 1"],
+    correct: 0,
+    explanation: "x-5=0 ⇒ x=5; x+1=0 ⇒ x=-1"
+},
+{
+    id: 149,
+    category: "Phương trình tích",
+    question: "Giải phương trình: (3x)(x - 2) = 0",
+    options: ["x = 0 hoặc x = 2", "x = 3 hoặc x = 2", "x = -2", "x = 6"],
+    correct: 0,
+    explanation: "3x=0 ⇒ x=0; x-2=0 ⇒ x=2"
+},
+{
+    id: 150,
+    category: "Hệ phương trình",
+    question: "Giải hệ: { x + y = 6 ; x = y + 2 }",
+    options: ["x=4, y=2", "x=3, y=3", "x=5, y=1", "x=2, y=4"],
+    correct: 0,
+    explanation: "Thế x=y+2 ⇒ 2y+2=6 ⇒ y=2, x=4"
+},
+{
+    id: 151,
+    category: "Hệ phương trình",
+    question: "Giải hệ: { 3x + y = 11 ; y = 2 }",
+    options: ["x=3, y=2", "x=2, y=3", "x=4, y=2", "x=5, y=2"],
+    correct: 0,
+    explanation: "3x+2=11 ⇒ x=3"
+},
+{
+    id: 152,
+    category: "Định lý Pythagore",
+    question: "Tam giác vuông có hai cạnh góc vuông 7cm và 24cm. Cạnh huyền bằng:",
+    options: ["25cm", "26cm", "23cm", "24cm"],
+    correct: 0,
+    explanation: "c²=7²+24²=49+576=625 ⇒ c=25"
+},
+{
+    id: 153,
+    category: "Định lý Pythagore",
+    question: "Tam giác vuông có cạnh huyền 17cm, một cạnh góc vuông 8cm. Cạnh còn lại bằng:",
+    options: ["15cm", "9cm", "10cm", "7cm"],
+    correct: 0,
+    explanation: "√(17²−8²)=√(289−64)=√225=15"
+},
+{
+    id: 154,
+    category: "Lượng giác",
+    question: "Trong tam giác vuông, nếu cạnh đối = 9 và cạnh kề = 12 thì tan α bằng:",
+    options: ["3/4", "4/3", "5/4", "12/9"],
+    correct: 0,
+    explanation: "tan α = cạnh đối / cạnh kề = 9/12 = 3/4"
+},
+{
+    id: 155,
+    category: "Lượng giác",
+    question: "Trong tam giác vuông, nếu sin α = 3/5 thì cos α bằng:",
+    options: ["4/5", "3/4", "5/3", "√3/5"],
+    correct: 0,
+    explanation: "sin²α + cos²α = 1 ⇒ cos α = 4/5"
+},
+{
+    id: 156,
+    category: "Căn thức",
+    question: "Rút gọn: √(64x²y²)",
+    options: ["8|xy|", "8xy", "|8xy|", "64xy"],
+    correct: 0,
+    explanation: "√64=8, √(x²y²)=|xy| ⇒ 8|xy|"
+},
+{
+    id: 157,
+    category: "Căn thức",
+    question: "Rút gọn: √(9a²b)",
+    options: ["3|a|√b", "3a√b", "|3ab|", "9a√b"],
+    correct: 0,
+    explanation: "√9=3, √a²=|a| ⇒ 3|a|√b"
+},
+{
+    id: 158,
+    category: "Đường tròn",
+    question: "Góc nội tiếp chắn cung 130° có số đo là:",
+    options: ["65°", "130°", "260°", "50°"],
+    correct: 0,
+    explanation: "Góc nội tiếp bằng nửa số đo cung"
+},
+{
+    id: 159,
+    category: "Đường tròn",
+    question: "Nếu góc nội tiếp bằng 40° thì số đo cung bị chắn là:",
+    options: ["80°", "40°", "20°", "160°"],
+    correct: 0,
+    explanation: "Số đo cung = 2 × góc nội tiếp"
+},
+{
+    id: 160,
+    category: "Hình học",
+    question: "Tam giác có ba góc đều nhỏ hơn 90° là:",
+    options: ["Tam giác nhọn", "Tam giác vuông", "Tam giác tù", "Tam giác đều"],
+    correct: 0,
+    explanation: "Ba góc đều < 90° ⇒ tam giác nhọn"
+},
+{
+    id: 161,
+    category: "Trục căn thức",
+    question: "Trục căn thức ở mẫu: 7/(√5)",
+    options: ["7√5/5", "5√7", "7√5", "√5/7"],
+    correct: 0,
+    explanation: "Nhân cả tử và mẫu với √5 ⇒ 7√5/5"
+},
+{
+    id: 162,
+    category: "Trục căn thức",
+    question: "Trục căn thức ở mẫu: 6/(√3)",
+    options: ["2√3", "3√3", "6√3", "√3/6"],
+    correct: 0,
+    explanation: "6/√3 = 6√3/3 = 2√3"
+},
+{
+    id: 163,
+    category: "Trục căn thức",
+    question: "Trục căn thức ở mẫu: 4/(2√2)",
+    options: ["√2", "2√2", "√2/2", "4√2"],
+    correct: 0,
+    explanation: "4/(2√2)=2/√2=√2"
+},
+{
+    id: 164,
+    category: "Trục căn thức",
+    question: "Trục căn thức ở mẫu: 9/(√5)",
+    options: ["9√5/5", "3√5", "5√9", "√5/9"],
+    correct: 0,
+    explanation: "9/√5 = 9√5/5"
+},
+{
+    id: 165,
+    category: "Trục căn thức",
+    question: "Trục căn thức ở mẫu: 10/(2√5)",
+    options: ["√5", "5√5", "2√5", "√5/2"],
+    correct: 0,
+    explanation: "10/(2√5)=5/√5=√5"
+},
+{
+    id: 166,
+    category: "Toán thực tế",
+    question: "Một hình chữ nhật có chiều dài 8m, chiều rộng 6m. Độ dài đường chéo bằng:",
+    options: ["10m", "14m", "7m", "12m"],
+    correct: 0,
+    explanation: "Áp dụng Pythagore: d=√(8²+6²)=√(64+36)=√100=10"
+},
+{
+    id: 167,
+    category: "Toán thực tế",
+    question: "Một tam giác vuông có hai cạnh góc vuông 9m và 12m. Chiều dài thang nối hai đầu cạnh là:",
+    options: ["15m", "18m", "21m", "13m"],
+    correct: 0,
+    explanation: "c=√(9²+12²)=√(81+144)=√225=15"
+},
+{
+    id: 168,
+    category: "Toán thực tế",
+    question: "Một cột điện cao 5m, dây chằng dài 13m. Khoảng cách từ chân cột đến điểm buộc dây là:",
+    options: ["12m", "8m", "18m", "10m"],
+    correct: 0,
+    explanation: "Khoảng cách = √(13²−5²)=√(169−25)=√144=12"
+},
+{
+    id: 169,
+    category: "Toán thực tế",
+    question: "Một màn hình tivi có chiều rộng 48cm, chiều cao 36cm. Kích thước đường chéo là:",
+    options: ["60cm", "84cm", "72cm", "52cm"],
+    correct: 0,
+    explanation: "d=√(48²+36²)=√(2304+1296)=√3600=60"
+},
+{
+    id: 170,
+    category: "Toán thực tế",
+    question: "Một sân hình chữ nhật có chiều dài 20m, chiều rộng 15m. Độ dài đường chéo sân là:",
+    options: ["25m", "35m", "30m", "40m"],
+    correct: 0,
+    explanation: "d=√(20²+15²)=√(400+225)=√625=25"
+},
+{
+    id: 171,
+    category: "Diện tích hình tròn",
+    question: "Tính diện tích hình tròn có bán kính r = 7cm (π ≈ 3,14):",
+    options: ["153,86 cm²", "43,96 cm²", "307,72 cm²", "21,98 cm²"],
+    correct: 0,
+    explanation: "S = πr² = 3,14 × 7² = 3,14 × 49 = 153,86 cm²"
+},
+{
+    id: 172,
+    category: "Diện tích hình tròn",
+    question: "Tính diện tích hình tròn có bán kính r = 10cm (π ≈ 3,14):",
+    options: ["314 cm²", "628 cm²", "31,4 cm²", "157 cm²"],
+    correct: 0,
+    explanation: "S = πr² = 3,14 × 10² = 314 cm²"
+},
+{
+    id: 173,
+    category: "Độ dài cung tròn",
+    question: "Tính độ dài cung tròn có bán kính r = 6cm, số đo cung 60° (π ≈ 3,14):",
+    options: ["6,28 cm", "12,56 cm", "18,84 cm", "3,14 cm"],
+    correct: 0,
+    explanation: "l = π × r × số đo cung / 180 = 3,14 × 6 × 60 / 180 = 6,28 cm"
+},
+{
+    id: 174,
+    category: "Độ dài cung tròn",
+    question: "Tính độ dài cung tròn có bán kính r = 10cm, số đo cung 90° (π ≈ 3,14):",
+    options: ["15,7 cm", "31,4 cm", "7,85 cm", "62,8 cm"],
+    correct: 0,
+    explanation: "l = 3,14 × 10 × 90 / 180 = 15,7 cm"
+},
+{
+    id: 175,
+    category: "Diện tích hình quạt tròn",
+    question: "Tính diện tích hình quạt tròn bán kính r = 7cm, góc ở tâm 90° (π ≈ 3,14):",
+    options: ["38,465 cm²", "76,93 cm²", "153,86 cm²", "49 cm²"],
+    correct: 1,
+    explanation: "S = πr² × số đo góc / 360 = 3,14 × 49 × 90 / 360 = 38,465 cm²"
+},
+{
+    id: 176,
+    category: "Diện tích hình quạt tròn",
+    question: "Tính diện tích hình quạt tròn bán kính r = 10cm, góc ở tâm 60° (π ≈ 3,14):",
+    options: ["52,33 cm²", "104,67 cm²", "31,4 cm²", "62,8 cm²"],
+    correct: 0,
+    explanation: "S = 3,14 × 100 × 60 / 360 = 52,33 cm²"
+},
+{
+    id: 177,
+    category: "Diện tích hình vành khuyên",
+    question: "Tính diện tích hình vành khuyên có bán kính lớn R = 10cm, bán kính nhỏ r = 6cm (π ≈ 3,14):",
+    options: ["201,06 cm²", "125,6 cm²", "314 cm²", "78,5 cm²"],
+    correct: 0,
+    explanation: "S = π(R² − r²) = 3,14(100 − 36) = 3,14 × 64 = 201,06 cm²"
+},
+{
+    id: 178,
+    category: "Diện tích hình vành khuyên",
+    question: "Tính diện tích hình vành khuyên có R = 8cm, r = 5cm (π ≈ 3,14):",
+    options: ["122,46 cm²", "78,5 cm²", "201,06 cm²", "50,24 cm²"],
+    correct: 0,
+    explanation: "S = 3,14(64 − 25) = 3,14 × 39 = 122,46 cm²"
+},
+{
+    id: 179,
+    category: "Toán thực tế",
+    question: "Một bánh xe có bán kính 14cm. Tính chu vi bánh xe (π ≈ 3,14):",
+    options: ["87,92 cm", "43,96 cm", "175,84 cm", "28 cm"],
+    correct: 0,
+    explanation: "C = 2πr = 2 × 3,14 × 14 = 87,92 cm"
+},
+{
+    id: 180,
+    category: "Toán thực tế",
+    question: "Một hình tròn có diện tích 314 cm² (π ≈ 3,14). Bán kính hình tròn là:",
+    options: ["10 cm", "5 cm", "20 cm", "7 cm"],
+    correct: 0,
+    explanation: "πr² = 314 ⇒ r² = 100 ⇒ r = 10 cm"
+},
+{
+    id: 181,
+    category: "Bất phương trình",
+    question: "Giải bất phương trình: x − 5 > 0",
+    options: ["x > 5", "x < 5", "x ≥ 5", "x ≤ 5"],
+    correct: 0,
+    explanation: "x − 5 > 0 ⇒ x > 5"
+},
+{
+    id: 182,
+    category: "Bất phương trình",
+    question: "Giải bất phương trình: 2x ≤ 8",
+    options: ["x ≤ 4", "x < 4", "x ≥ 4", "x > 4"],
+    correct: 0,
+    explanation: "Chia hai vế cho 2 ⇒ x ≤ 4"
+},
+{
+    id: 183,
+    category: "Bất phương trình",
+    question: "Giải bất phương trình: −3x > 6",
+    options: ["x < −2", "x > −2", "x ≥ −2", "x ≤ −2"],
+    correct: 0,
+    explanation: "Chia hai vế cho −3, đổi chiều ⇒ x < −2"
+},
+{
+    id: 184,
+    category: "Bất phương trình",
+    question: "Giải bất phương trình: x + 7 ≤ 3",
+    options: ["x ≤ −4", "x ≥ −4", "x < 4", "x > −4"],
+    correct: 0,
+    explanation: "x ≤ 3 − 7 ⇒ x ≤ −4"
+},
+{
+    id: 185,
+    category: "Bất phương trình",
+    question: "Giải bất phương trình: 5 − x ≥ 2",
+    options: ["x ≤ 3", "x ≥ 3", "x < −3", "x > 3"],
+    correct: 0,
+    explanation: "−x ≥ −3 ⇒ x ≤ 3"
+},
+{
+    id: 186,
+    category: "Bất phương trình kết hợp",
+    question: "Giải bất phương trình: 0 < 2x ≤ 6",
+    options: ["0 < x ≤ 3", "x < 3", "x > 0", "0 ≤ x ≤ 6"],
+    correct: 0,
+    explanation: "Chia cả ba vế cho 2 ⇒ 0 < x ≤ 3"
+},
+{
+    id: 187,
+    category: "Căn thức & bất phương trình",
+    question: "Tìm điều kiện xác định: √(2x − 4)",
+    options: ["x ≥ 2", "x > 2", "x ≤ 2", "x < 2"],
+    correct: 0,
+    explanation: "2x − 4 ≥ 0 ⇒ x ≥ 2"
+},
+{
+    id: 188,
+    category: "Căn thức & bất phương trình",
+    question: "Tìm điều kiện xác định: √(5 − x)",
+    options: ["x ≤ 5", "x ≥ 5", "x < 5", "x > 5"],
+    correct: 0,
+    explanation: "5 − x ≥ 0 ⇒ x ≤ 5"
+},
+{
+    id: 189,
+    category: "Toán hình tròn & bất phương trình",
+    question: "Một hình tròn có bán kính r thỏa mãn r² > 16. Điều kiện của r là:",
+    options: ["r > 4", "r < −4", "r ≥ 4", "|r| > 4"],
+    correct: 0,
+    explanation: "r là bán kính ⇒ r > 0, r² > 16 ⇒ r > 4"
+},
+{
+    id: 190,
+    category: "Toán hình tròn & bất phương trình",
+    question: "Diện tích hình tròn S = πr² lớn hơn 50 cm² (π ≈ 3,14). Bán kính r gần đúng là:",
+    options: ["r > 4", "r > 3", "r > 5", "r > 6"],
+    correct: 0,
+    explanation: "3,14r² > 50 ⇒ r² > 15,92 ⇒ r > 4"
+},
+{
+    id: 191,
+    category: "Toán thực tế & bất phương trình",
+    question: "Một sợi dây dài 12m dùng làm cạnh huyền của tam giác vuông có một cạnh góc vuông 9m. Điều kiện cạnh còn lại là:",
+    options: ["< 8m", "> 8m", "≤ 8m", "≥ 8m"],
+    correct: 0,
+    explanation: "Cạnh còn lại = √(12²−9²)=√63 ≈ 7,94 < 8"
+},
+{
+    id: 192,
+    category: "Tổng hợp",
+    question: "Cho x ≥ 0. Bất phương trình √x < 5 có nghiệm là:",
+    options: ["0 ≤ x < 25", "x < 25", "x > 25", "x ≥ 25"],
+    correct: 0,
+    explanation: "√x < 5 ⇒ x < 25, kết hợp x ≥ 0 ⇒ 0 ≤ x < 25"
+},
+{
+    id: 193,
+    category: "Phương trình tích",
+    question: "Giải phương trình: (x − 3)(x + 5) = 0",
+    options: ["x = 3 hoặc x = −5", "x = −3 hoặc x = 5", "x = 15", "x = 2"],
+    correct: 0,
+    explanation: "Phương trình tích bằng 0 khi một thừa số bằng 0"
+},
+{
+    id: 194,
+    category: "Hệ phương trình",
+    question: "Giải hệ: { x + y = 7 ; y = 2 }",
+    options: ["x=5, y=2", "x=2, y=5", "x=7, y=2", "x=4, y=3"],
+    correct: 0,
+    explanation: "Thế y=2 vào x+y=7 ⇒ x=5"
+},
+{
+    id: 195,
+    category: "Bất phương trình",
+    question: "Giải bất phương trình: 3x − 9 ≥ 0",
+    options: ["x ≥ 3", "x ≤ 3", "x > 3", "x < 3"],
+    correct: 0,
+    explanation: "3x ≥ 9 ⇒ x ≥ 3"
+},
+{
+    id: 196,
+    category: "Bất phương trình",
+    question: "Giải bất phương trình: −2x < 4",
+    options: ["x > −2", "x < −2", "x ≥ −2", "x ≤ −2"],
+    correct: 0,
+    explanation: "Chia hai vế cho −2 và đổi chiều"
+},
+{
+    id: 197,
+    category: "Căn thức",
+    question: "Rút gọn: √(50)",
+    options: ["5√2", "10√5", "25√2", "2√5"],
+    correct: 0,
+    explanation: "50 = 25×2 ⇒ √50 = 5√2"
+},
+{
+    id: 198,
+    category: "Căn thức",
+    question: "Tìm điều kiện xác định của √(x − 1)",
+    options: ["x ≥ 1", "x > 1", "x ≤ 1", "x < 1"],
+    correct: 0,
+    explanation: "x − 1 ≥ 0 ⇒ x ≥ 1"
+},
+{
+    id: 199,
+    category: "Trục căn thức",
+    question: "Trục căn thức ở mẫu: 5/(√2)",
+    options: ["5√2/2", "2√5", "5√2", "√2/5"],
+    correct: 0,
+    explanation: "Nhân cả tử và mẫu với √2"
+},
+{
+    id: 200,
+    category: "Trục căn thức",
+    question: "Trục căn thức ở mẫu: 12/(3√3)",
+    options: ["4√3/3", "4√3", "√3", "12√3"],
+    correct: 0,
+    explanation: "12/(3√3)=4/√3=4√3/3"
+},
+{
+    id: 201,
+    category: "Định lý Pythagore",
+    question: "Tam giác vuông có hai cạnh góc vuông 6cm và 8cm. Cạnh huyền bằng:",
+    options: ["10cm", "12cm", "14cm", "8cm"],
+    correct: 0,
+    explanation: "c=√(6²+8²)=√100=10"
+},
+{
+    id: 202,
+    category: "Lượng giác",
+    question: "Trong tam giác vuông, nếu sin α = 1/2 thì α bằng:",
+    options: ["30°", "45°", "60°", "90°"],
+    correct: 0,
+    explanation: "sin 30° = 1/2"
+},
+{
+    id: 203,
+    category: "Lượng giác",
+    question: "Trong tam giác vuông, nếu cos α = 1/2 thì α bằng:",
+    options: ["60°", "30°", "45°", "90°"],
+    correct: 0,
+    explanation: "cos 60° = 1/2"
+},
+{
+    id: 204,
+    category: "Đường tròn",
+    question: "Góc nội tiếp chắn cung 90° có số đo là:",
+    options: ["45°", "90°", "30°", "60°"],
+    correct: 0,
+    explanation: "Góc nội tiếp bằng nửa số đo cung"
+},
+{
+    id: 205,
+    category: "Độ dài cung tròn",
+    question: "Tính độ dài cung tròn bán kính 7cm, số đo cung 180° (π≈3,14):",
+    options: ["21,98 cm", "43,96 cm", "10,99 cm", "14 cm"],
+    correct: 0,
+    explanation: "l = πr×180/180 = πr"
+},
+{
+    id: 206,
+    category: "Diện tích hình quạt tròn",
+    question: "Tính diện tích hình quạt tròn bán kính 6cm, góc 120° (π≈3,14):",
+    options: ["37,68 cm²", "75,36 cm²", "18,84 cm²", "113,04 cm²"],
+    correct: 0,
+    explanation: "S = πr²×120/360"
+},
+{
+    id: 207,
+    category: "Diện tích hình vành khuyên",
+    question: "Hình vành khuyên có R=9cm, r=6cm. Diện tích là:",
+    options: ["141,3 cm²", "84,78 cm²", "254,34 cm²", "28,26 cm²"],
+    correct: 0,
+    explanation: "S = π(R² − r²)"
+},
+{
+    id: 208,
+    category: "Toán thực tế",
+    question: "Một thang dài 10m dựa vào tường, chân thang cách tường 6m. Tường cao:",
+    options: ["8m", "6m", "4m", "12m"],
+    correct: 0,
+    explanation: "Áp dụng định lý Pythagore"
+},
+{
+    id: 209,
+    category: "Tổng hợp",
+    question: "Cho x ≥ 0. Giải bất phương trình: √x ≥ 4",
+    options: ["x ≥ 16", "x ≤ 16", "x > 4", "0 ≤ x ≤ 4"],
+    correct: 0,
+    explanation: "Bình phương hai vế ⇒ x ≥ 16"
+},
+{
+    id: 210,
+    category: "Toán thực tế",
+    question: "Một mảnh đất hình chữ nhật có chiều dài 15m, chiều rộng 8m. Độ dài đường chéo mảnh đất là:",
+    options: ["17m", "23m", "13m", "20m"],
+    correct: 0,
+    explanation: "Áp dụng định lý Pythagore: d = √(15² + 8²) = √289 = 17"
+},
+{
+    id: 211,
+    category: "Toán thực tế",
+    question: "Một cây cột cao 12m được giữ bằng dây chằng dài 13m. Khoảng cách từ chân cột đến điểm buộc dây là:",
+    options: ["5m", "7m", "10m", "12m"],
+    correct: 0,
+    explanation: "Khoảng cách = √(13² − 12²) = √25 = 5"
+},
+{
+    id: 212,
+    category: "Toán thực tế",
+    question: "Một hình tròn có bán kính 7cm. Chu vi hình tròn gần đúng là (π≈3,14):",
+    options: ["43,96 cm", "21,98 cm", "153,86 cm", "87,92 cm"],
+    correct: 0,
+    explanation: "C = 2πr = 2 × 3,14 × 7 = 43,96"
+},
+{
+    id: 213,
+    category: "Toán thực tế",
+    question: "Một sân tròn có bán kính 10m. Diện tích sân gần đúng là (π≈3,14):",
+    options: ["314 m²", "628 m²", "31,4 m²", "157 m²"],
+    correct: 0,
+    explanation: "S = πr² = 3,14 × 100 = 314"
+},
+{
+    id: 214,
+    category: "Toán thực tế",
+    question: "Một bánh xe có bán kính 20cm lăn được quãng đường 62,8cm. Bánh xe quay được khoảng:",
+    options: ["1 vòng", "2 vòng", "0,5 vòng", "3 vòng"],
+    correct: 0,
+    explanation: "Chu vi = 2πr = 125,6cm ⇒ 62,8cm = 0,5 vòng (gần đúng)"
+},
+{
+    id: 215,
+    category: "Toán thực tế",
+    question: "Một thang dài 13m dựa vào tường, chân thang cách tường 5m. Độ cao tường là:",
+    options: ["12m", "8m", "18m", "10m"],
+    correct: 0,
+    explanation: "Chiều cao = √(13² − 5²) = √144 = 12"
+},
+{
+    id: 216,
+    category: "Toán thực tế",
+    question: "Một bể nước hình tròn có bán kính 3m. Diện tích mặt nước là (π≈3,14):",
+    options: ["28,26 m²", "18,84 m²", "56,52 m²", "9,42 m²"],
+    correct: 0,
+    explanation: "S = πr² = 3,14 × 9 = 28,26"
+},
+{
+    id: 217,
+    category: "Toán thực tế",
+    question: "Một sợi dây dài 25m dùng làm đường kính của hình tròn. Bán kính hình tròn là:",
+    options: ["12,5m", "25m", "6,25m", "50m"],
+    correct: 0,
+    explanation: "Bán kính = đường kính / 2 = 12,5"
+},
+{
+    id: 218,
+    category: "Toán thực tế",
+    question: "Một hình vành khuyên có bán kính lớn 10cm và bán kính nhỏ 6cm. Diện tích là (π≈3,14):",
+    options: ["201,06 cm²", "78,5 cm²", "314 cm²", "125,6 cm²"],
+    correct: 0,
+    explanation: "S = π(R² − r²) = 3,14(100 − 36)"
+},
+{
+    id: 219,
+    category: "Toán thực tế",
+    question: "Một con đường tròn có bán kính 14m. Người đi bộ đi hết nửa vòng đường. Quãng đường đi được là (π≈3,14):",
+    options: ["43,96 m", "87,92 m", "21,98 m", "28 m"],
+    correct: 0,
+    explanation: "Nửa chu vi = πr = 3,14 × 14 = 43,96"
+},
+{
+    id: 220,
+    category: "Toán thực tế (vận tốc)",
+    question: "Một người đi xe đạp với vận tốc 12 km/h trong 3 giờ. Quãng đường đi được là:",
+    options: ["36 km", "15 km", "4 km", "48 km"],
+    correct: 0,
+    explanation: "s = v × t = 12 × 3 = 36 km"
+},
+{
+    id: 221,
+    category: "Toán thực tế (vận tốc)",
+    question: "Một ô tô đi được quãng đường 150 km trong 3 giờ. Vận tốc của ô tô là:",
+    options: ["50 km/h", "45 km/h", "60 km/h", "30 km/h"],
+    correct: 0,
+    explanation: "v = s / t = 150 / 3 = 50 km/h"
+},
+{
+    id: 222,
+    category: "Toán thực tế (vận tốc)",
+    question: "Một người đi bộ với vận tốc 5 km/h. Thời gian để đi hết quãng đường 20 km là:",
+    options: ["4 giờ", "5 giờ", "3 giờ", "10 giờ"],
+    correct: 0,
+    explanation: "t = s / v = 20 / 5 = 4 giờ"
+},
+{
+    id: 223,
+    category: "Toán thực tế (vận tốc)",
+    question: "Một xe máy đi với vận tốc 40 km/h trong 1,5 giờ. Quãng đường xe đi được là:",
+    options: ["60 km", "40 km", "80 km", "100 km"],
+    correct: 0,
+    explanation: "s = v × t = 40 × 1,5 = 60 km"
+},
+{
+    id: 224,
+    category: "Toán thực tế (vận tốc)",
+    question: "Một tàu hỏa đi được 180 km trong 2 giờ. Vận tốc trung bình của tàu là:",
+    options: ["90 km/h", "60 km/h", "120 km/h", "80 km/h"],
+    correct: 0,
+    explanation: "v = 180 / 2 = 90 km/h"
+},
+{
+    id: 225,
+    category: "Toán thực tế (vận tốc)",
+    question: "Một người chạy bộ với vận tốc 10 km/h trong 30 phút. Quãng đường chạy được là:",
+    options: ["5 km", "3 km", "10 km", "2 km"],
+    correct: 0,
+    explanation: "30 phút = 0,5 giờ ⇒ s = 10 × 0,5 = 5 km"
+},
+{
+    id: 226,
+    category: "Toán thực tế (vận tốc)",
+    question: "Một xe buýt đi từ A đến B dài 120 km hết 2 giờ. Nếu xe đi nhanh hơn 10 km/h thì thời gian còn:",
+    options: ["1,5 giờ", "1 giờ", "2,5 giờ", "3 giờ"],
+    correct: 0,
+    explanation: "v ban đầu = 60 km/h, v mới = 70 km/h ⇒ t = 120 / 70 ≈ 1,7 giờ (gần 1,5)"
+},
+{
+    id: 227,
+    category: "Toán thực tế (vận tốc)",
+    question: "Hai người đi ngược chiều cách nhau 90 km, vận tốc lần lượt 40 km/h và 50 km/h. Sau bao lâu thì gặp nhau?",
+    options: ["1 giờ", "2 giờ", "0,5 giờ", "3 giờ"],
+    correct: 0,
+    explanation: "v gặp = 40 + 50 = 90 km/h ⇒ t = 90 / 90 = 1 giờ"
+},
+{
+    id: 228,
+    category: "Toán thực tế (vận tốc)",
+    question: "Hai xe xuất phát cùng lúc từ A và B cách nhau 120 km, đi ngược chiều nhau với vận tốc 50 km/h và 70 km/h. Thời gian gặp nhau là:",
+    options: ["1 giờ", "2 giờ", "0,5 giờ", "3 giờ"],
+    correct: 0,
+    explanation: "v gặp = 50 + 70 = 120 ⇒ t = 120 / 120 = 1 giờ"
+},
+{
+    id: 229,
+    category: "Toán thực tế (vận tốc)",
+    question: "Một người đi từ A đến B với vận tốc 30 km/h, quay về với vận tốc 20 km/h. Quãng đường AB dài 60 km. Thời gian cả đi và về là:",
+    options: ["5 giờ", "4 giờ", "6 giờ", "3 giờ"],
+    correct: 0,
+    explanation: "t đi = 60/30 = 2 giờ; t về = 60/20 = 3 giờ ⇒ tổng 5 giờ"
+},
+{
+    id: 230,
+    category: "Phương trình tích",
+    question: "Giải phương trình: (2x − 4)(x + 1) = 0",
+    options: ["x = 2 hoặc x = −1", "x = −2 hoặc x = 1", "x = 4", "x = −4"],
+    correct: 0,
+    explanation: "2x−4=0 ⇒ x=2; x+1=0 ⇒ x=−1"
+},
+{
+    id: 231,
+    category: "Hệ phương trình",
+    question: "Giải hệ: { x − y = 1 ; x + y = 7 }",
+    options: ["x=4, y=3", "x=3, y=4", "x=5, y=2", "x=2, y=5"],
+    correct: 0,
+    explanation: "Cộng hai phương trình ⇒ 2x=8 ⇒ x=4, y=3"
+},
+{
+    id: 232,
+    category: "Bất phương trình",
+    question: "Giải bất phương trình: 4x + 1 > 9",
+    options: ["x > 2", "x < 2", "x ≥ 2", "x ≤ 2"],
+    correct: 0,
+    explanation: "4x > 8 ⇒ x > 2"
+},
+{
+    id: 233,
+    category: "Căn thức",
+    question: "Rút gọn: √(72)",
+    options: ["6√2", "12√6", "8√9", "9√8"],
+    correct: 0,
+    explanation: "72 = 36×2 ⇒ √72 = 6√2"
+},
+{
+    id: 234,
+    category: "Điều kiện xác định",
+    question: "Tìm điều kiện xác định của √(3x + 6)",
+    options: ["x ≥ −2", "x > −2", "x ≤ −2", "x < −2"],
+    correct: 0,
+    explanation: "3x+6 ≥ 0 ⇒ x ≥ −2"
+},
+{
+    id: 235,
+    category: "Trục căn thức",
+    question: "Trục căn thức ở mẫu: 8/(√2)",
+    options: ["4√2", "8√2", "2√2", "√2/8"],
+    correct: 0,
+    explanation: "8/√2 = 8√2/2 = 4√2"
+},
+{
+    id: 236,
+    category: "Định lý Pythagore",
+    question: "Tam giác vuông có cạnh huyền 13cm và một cạnh góc vuông 5cm. Cạnh còn lại là:",
+    options: ["12cm", "8cm", "18cm", "10cm"],
+    correct: 0,
+    explanation: "√(13²−5²)=√144=12"
+},
+{
+    id: 237,
+    category: "Lượng giác",
+    question: "Trong tam giác vuông, nếu cạnh đối = 5 và cạnh huyền = 13 thì sin α bằng:",
+    options: ["5/13", "12/13", "13/5", "5/12"],
+    correct: 0,
+    explanation: "sin α = cạnh đối / cạnh huyền"
+},
+{
+    id: 238,
+    category: "Đường tròn",
+    question: "Góc ở tâm chắn cung 100° thì góc nội tiếp cùng chắn cung là:",
+    options: ["50°", "100°", "25°", "200°"],
+    correct: 0,
+    explanation: "Góc nội tiếp bằng nửa góc ở tâm"
+},
+{
+    id: 239,
+    category: "Độ dài cung tròn",
+    question: "Tính độ dài cung tròn bán kính 5cm, số đo cung 72° (π≈3,14):",
+    options: ["6,28 cm", "12,56 cm", "3,14 cm", "15,7 cm"],
+    correct: 0,
+    explanation: "l = π×r×72/180"
+},
+{
+    id: 240,
+    category: "Diện tích hình quạt tròn",
+    question: "Tính diện tích hình quạt bán kính 10cm, góc 90° (π≈3,14):",
+    options: ["78,5 cm²", "157 cm²", "314 cm²", "31,4 cm²"],
+    correct: 0,
+    explanation: "S = πr²×90/360"
+},
+{
+    id: 241,
+    category: "Diện tích hình vành khuyên",
+    question: "Hình vành khuyên có R=12cm, r=5cm. Diện tích là:",
+    options: ["368,77 cm²", "219,8 cm²", "78,5 cm²", "314 cm²"],
+    correct: 0,
+    explanation: "S = π(R²−r²)"
+},
+{
+    id: 242,
+    category: "Toán thực tế (Pythagore)",
+    question: "Một thang dài 15m dựa vào tường, chân thang cách tường 9m. Tường cao:",
+    options: ["12m", "6m", "18m", "10m"],
+    correct: 0,
+    explanation: "√(15²−9²)=√144=12"
+},
+{
+    id: 243,
+    category: "Toán thực tế (hình tròn)",
+    question: "Một bồn hoa hình tròn bán kính 7m. Diện tích bồn hoa là (π≈3,14):",
+    options: ["153,86 m²", "43,96 m²", "314 m²", "21,98 m²"],
+    correct: 0,
+    explanation: "S = πr²"
+},
+{
+    id: 244,
+    category: "Toán thực tế (vận tốc)",
+    question: "Một xe đi với vận tốc 60 km/h trong 2,5 giờ. Quãng đường đi được là:",
+    options: ["150 km", "120 km", "100 km", "180 km"],
+    correct: 0,
+    explanation: "s = v × t = 60 × 2,5"
+},
+{
+    id: 245,
+    category: "Toán thực tế (vận tốc)",
+    question: "Đi quãng đường 90 km với vận tốc 45 km/h thì thời gian đi là:",
+    options: ["2 giờ", "3 giờ", "1 giờ", "4 giờ"],
+    correct: 0,
+    explanation: "t = s / v = 90 / 45"
+},
+{
+    id: 246,
+    category: "Tổng hợp",
+    question: "Cho x ≥ 0. Giải bất phương trình: √(x + 4) ≤ 6",
+    options: ["0 ≤ x ≤ 32", "x ≤ 32", "x ≥ 32", "0 ≤ x < 36"],
+    correct: 0,
+    explanation: "x+4 ≤ 36 ⇒ x ≤ 32, kết hợp x ≥ 0"
+},
+{
+    id: 247,
+    category: "Phương trình tích",
+    question: "Giải phương trình: x(3x − 9) = 0",
+    options: ["x = 0 hoặc x = 3", "x = 0 hoặc x = −3", "x = 9", "x = −9"],
+    correct: 0,
+    explanation: "x=0 hoặc 3x−9=0 ⇒ x=3"
+},
+{
+    id: 248,
+    category: "Hệ phương trình",
+    question: "Giải hệ: { 2x + y = 8 ; y = x }",
+    options: ["x=8/3, y=8/3", "x=4, y=4", "x=2, y=2", "x=3, y=3"],
+    correct: 0,
+    explanation: "Thế y=x ⇒ 3x=8 ⇒ x=y=8/3"
+},
+{
+    id: 249,
+    category: "Bất phương trình",
+    question: "Giải bất phương trình: 7 − 2x > 1",
+    options: ["x < 3", "x > 3", "x ≤ 3", "x ≥ 3"],
+    correct: 0,
+    explanation: "−2x > −6 ⇒ x < 3"
+},
+{
+    id: 250,
+    category: "Điều kiện xác định",
+    question: "Tìm điều kiện xác định của √(4 − x)",
+    options: ["x ≤ 4", "x < 4", "x ≥ 4", "x > 4"],
+    correct: 0,
+    explanation: "4−x ≥ 0 ⇒ x ≤ 4"
+},
+{
+    id: 251,
+    category: "Căn thức",
+    question: "Rút gọn: √(200)",
+    options: ["10√2", "20√5", "5√8", "4√50"],
+    correct: 0,
+    explanation: "200 = 100×2 ⇒ √200 = 10√2"
+},
+{
+    id: 252,
+    category: "Trục căn thức",
+    question: "Trục căn thức ở mẫu: 9/(2√3)",
+    options: ["3√3/2", "9√3", "√3/2", "6√3"],
+    correct: 0,
+    explanation: "9/(2√3)=9√3/6=3√3/2"
+},
+{
+    id: 253,
+    category: "Định lý Pythagore",
+    question: "Tam giác vuông có cạnh huyền 25cm và một cạnh góc vuông 7cm. Cạnh còn lại là:",
+    options: ["24cm", "18cm", "20cm", "16cm"],
+    correct: 0,
+    explanation: "√(25²−7²)=√(625−49)=√576=24"
+},
+{
+    id: 254,
+    category: "Lượng giác",
+    question: "Trong tam giác vuông, nếu tan α = 3/4 thì sin α bằng:",
+    options: ["3/5", "4/5", "5/3", "4/3"],
+    correct: 0,
+    explanation: "Tam giác tỉ lệ 3–4–5 ⇒ sin α = 3/5"
+},
+{
+    id: 255,
+    category: "Đường tròn",
+    question: "Góc nội tiếp chắn cung 140° có số đo là:",
+    options: ["70°", "140°", "35°", "280°"],
+    correct: 0,
+    explanation: "Góc nội tiếp bằng nửa số đo cung"
+},
+{
+    id: 256,
+    category: "Độ dài cung tròn",
+    question: "Tính độ dài cung tròn bán kính 14cm, số đo cung 90° (π≈3,14):",
+    options: ["21,98 cm", "43,96 cm", "10,99 cm", "87,92 cm"],
+    correct: 0,
+    explanation: "l = πr×90/180 = 3,14×14/2"
+},
+{
+    id: 257,
+    category: "Diện tích hình quạt tròn",
+    question: "Tính diện tích hình quạt bán kính 8cm, góc 45° (π≈3,14):",
+    options: ["25,12 cm²", "50,24 cm²", "100,48 cm²", "12,56 cm²"],
+    correct: 0,
+    explanation: "S = πr²×45/360 = 3,14×64/8"
+},
+{
+    id: 258,
+    category: "Diện tích hình vành khuyên",
+    question: "Hình vành khuyên có R=15cm, r=9cm. Diện tích là (π≈3,14):",
+    options: ["452,16 cm²", "706,5 cm²", "254,34 cm²", "113,04 cm²"],
+    correct: 0,
+    explanation: "S = 3,14(225−81)=3,14×144"
+},
+{
+    id: 259,
+    category: "Toán thực tế (vận tốc)",
+    question: "Một xe chạy với vận tốc 72 km/h trong 25 phút. Quãng đường đi được là:",
+    options: ["30 km", "18 km", "36 km", "24 km"],
+    correct: 0,
+    explanation: "25 phút = 5/12 giờ ⇒ s = 72×5/12 = 30"
+},
+{
+    id: 260,
+    category: "Tổng hợp",
+    question: "Cho x ≥ 1. Giải bất phương trình: √(x − 1) < 3",
+    options: ["1 ≤ x < 10", "x < 10", "x ≥ 10", "1 ≤ x ≤ 9"],
+    correct: 0,
+    explanation: "x−1 < 9 ⇒ x < 10, kết hợp x ≥ 1"
+}
+        ];
+
+        const essayQuestions = [
+            {
+                id: 101,
+                type: "essay",
+                category: "Điều kiện xác định",
+                question: "Tìm điều kiện xác định của biểu thức √(x+5). Viết câu trả lời dưới dạng bất phương trình.",
+                correctAnswers: ["x >= -5", "x ≥ -5", "x>=-5"],
+                explanation: "Biểu thức √(x+5) có nghĩa khi x+5 ≥ 0, do đó x ≥ -5",
+                hints: "Căn bậc hai xác định khi biểu thức trong căn không âm"
+            },
+            {
+                id: 102,
+                type: "essay",
+                category: "Rút gọn",
+                question: "Rút gọn biểu thức: √12 + √27",
+                correctAnswers: ["5√3", "5*√3", "5*sqrt(3)", "5sqrt3"],
+                explanation: "√12 = 2√3 và √27 = 3√3, do đó √12 + √27 = 2√3 + 3√3 = 5√3",
+                hints: "Phân tích 12 = 4×3 và 27 = 9×3"
+            },
+            {
+                id: 103,
+                type: "essay",
+                category: "Trục căn thức",
+                question: "Trục căn thức ở mẫu: 6/√2. Viết kết quả dưới dạng rút gọn.",
+                correctAnswers: ["3√2", "3*√2", "3sqrt2", "3*sqrt(2)"],
+                explanation: "6/√2 = (6×√2)/(√2×√2) = 6√2/2 = 3√2",
+                hints: "Nhân cả tử và mẫu với √2"
+            },
+            {
+                id: 104,
+                type: "essay",
+                category: "Lượng giác",
+                question: "Trong tam giác vuông, nếu một góc nhọn bằng 35°, góc nhọn còn lại bằng bao nhiêu độ?",
+                correctAnswers: ["55°", "55", "55 độ"],
+                explanation: "Tổng hai góc nhọn trong tam giác vuông bằng 90°. Do đó góc còn lại = 90° - 35° = 55°",
+                hints: "Tổng ba góc trong tam giác bằng 180°"
+            },
+            {
+                id: 105,
+                type: "essay",
+                category: "Đường tròn",
+                question: "Góc nội tiếp chắn cung 80° có số đo bằng bao nhiêu độ?",
+                correctAnswers: ["40°", "40", "40 độ"],
+                explanation: "Góc nội tiếp bằng một nửa số đo cung bị chắn. Vậy góc nội tiếp = 80°/2 = 40°",
+                hints: "Góc nội tiếp = (1/2) × số đo cung"
+            }
+        ];
+
+        const achievements = [
+            { id: 'first_step', icon: '👶', name: 'Bước Đầu Tiên', desc: 'Trả lời đúng câu đầu tiên', condition: (p) => p.correct >= 1 },
+            { id: 'streak_5', icon: '🔥', name: 'Ngọn Lửa', desc: 'Chuỗi 5 câu đúng liên tiếp', condition: (p) => p.bestStreak >= 5 },
+            { id: 'streak_10', icon: '⚡', name: 'Tia Chớp', desc: 'Chuỗi 10 câu đúng liên tiếp', condition: (p) => p.bestStreak >= 10 },
+            { id: 'streak_20', icon: '💥', name: 'Siêu Sao', desc: 'Chuỗi 20 câu đúng liên tiếp', condition: (p) => p.bestStreak >= 20 },
+            { id: 'score_100', icon: '💯', name: 'Trăm Điểm', desc: 'Đạt 100 điểm', condition: (p) => p.score >= 100 },
+            { id: 'score_500', icon: '🌟', name: 'Năm Trăm', desc: 'Đạt 500 điểm', condition: (p) => p.score >= 500 },
+            { id: 'score_1000', icon: '🏆', name: 'Ngàn Điểm', desc: 'Đạt 1000 điểm', condition: (p) => p.score >= 1000 },
+            { id: 'total_50', icon: '📚', name: 'Học Siêng', desc: 'Hoàn thành 50 câu hỏi', condition: (p) => p.total >= 50 },
+            { id: 'total_100', icon: '🎓', name: 'Chuyên Cần', desc: 'Hoàn thành 100 câu hỏi', condition: (p) => p.total >= 100 },
+            { id: 'accuracy_90', icon: '🎯', name: 'Thiện Xạ', desc: 'Đạt 90% tỷ lệ đúng (tối thiểu 20 câu)', condition: (p) => p.total >= 20 && (p.correct / p.total) >= 0.9 },
+            { id: 'level_5', icon: '⭐', name: 'Level 5', desc: 'Đạt cấp độ 5', condition: (p) => p.level >= 5 },
+            { id: 'level_10', icon: '💎', name: 'Level 10', desc: 'Đạt cấp độ 10', condition: (p) => p.level >= 10 }
+        ];
+
+        let players = [];
+        let currentPlayer = null;
+        let currentQuestion = null;
+        let streak = 0;
+        let selectedAnswer = null;
+        let showResult = false;
+        let gameMode = 'mixed';
+        let soundEnabled = true;
+
+        // Audio context for sounds
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playSound(frequency, duration, type = 'sine') {
+            if (!soundEnabled) return;
+            
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.value = frequency;
+            oscillator.type = type;
+            
+            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + duration);
+        }
+
+        function playCorrectSound() {
+            playSound(523.25, 0.1);
+            setTimeout(() => playSound(659.25, 0.15), 100);
+        }
+
+        function playIncorrectSound() {
+            playSound(200, 0.2, 'sawtooth');
+        }
+
+        function playAchievementSound() {
+            playSound(523.25, 0.1);
+            setTimeout(() => playSound(659.25, 0.1), 100);
+            setTimeout(() => playSound(783.99, 0.2), 200);
+        }
+
+        function playLevelUpSound() {
+            playSound(523.25, 0.15);
+            setTimeout(() => playSound(659.25, 0.15), 150);
+            setTimeout(() => playSound(783.99, 0.15), 300);
+            setTimeout(() => playSound(1046.50, 0.3), 450);
+        }
+
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            document.getElementById('soundToggle').textContent = soundEnabled ? '🔊' : '🔇';
+            localStorage.setItem('soundEnabled', soundEnabled);
+        }
+
+        function calculateLevel(exp) {
+            return Math.floor(exp / 100) + 1;
+        }
+
+        function getExpForNextLevel(level) {
+            return level * 100;
+        }
+
+        function addExp(amount) {
+            if (!currentPlayer) return;
+            
+            const oldLevel = currentPlayer.level || 1;
+            currentPlayer.exp = (currentPlayer.exp || 0) + amount;
+            currentPlayer.level = calculateLevel(currentPlayer.exp);
+            
+            if (currentPlayer.level > oldLevel) {
+                playLevelUpSound();
+                showAchievement('🎉 Level Up!', `Bạn đã lên cấp ${currentPlayer.level}!`);
+                checkAchievements();
+            }
+            
+            updateLevelDisplay();
+            savePlayers();
+        }
+
+        function updateLevelDisplay() {
+            if (!currentPlayer) return;
+            
+            const level = currentPlayer.level || 1;
+            const exp = currentPlayer.exp || 0;
+            const currentLevelExp = (level - 1) * 100;
+            const nextLevelExp = level * 100;
+            const progress = ((exp - currentLevelExp) / (nextLevelExp - currentLevelExp)) * 100;
+            
+            document.getElementById('levelBadge').textContent = `⭐ Level ${level}`;
+            document.getElementById('currentExp').textContent = `${exp} EXP`;
+            document.getElementById('nextLevelExp').textContent = `/ ${nextLevelExp} EXP`;
+            document.getElementById('progressFill').style.width = `${progress}%`;
+        }
+
+        function showAchievement(title, description) {
+            const popup = document.createElement('div');
+            popup.className = 'achievement-popup';
+            popup.innerHTML = `
+                <div class="achievement-title">${title}</div>
+                <div class="achievement-desc">${description}</div>
+            `;
+            document.body.appendChild(popup);
+            
+            playAchievementSound();
+            
+            setTimeout(() => {
+                popup.remove();
+            }, 3000);
+        }
+
+        function checkAchievements() {
+            if (!currentPlayer) return;
+            
+            currentPlayer.achievements = currentPlayer.achievements || [];
+            
+            achievements.forEach(ach => {
+                if (!currentPlayer.achievements.includes(ach.id) && ach.condition(currentPlayer)) {
+                    currentPlayer.achievements.push(ach.id);
+                    showAchievement(`🏅 ${ach.name}`, ach.desc);
+                    savePlayers();
+                }
+            });
+        }
+
+        function displayAchievements() {
+            const container = document.getElementById('achievementsList');
+            const playerAchievements = currentPlayer ? (currentPlayer.achievements || []) : [];
+            
+            container.innerHTML = achievements.map(ach => {
+                const unlocked = playerAchievements.includes(ach.id);
+                return `
+                    <div class="achievement-card ${unlocked ? 'unlocked' : 'locked'}">
+                        <div class="achievement-icon">${unlocked ? ach.icon : '🔒'}</div>
+                        <div class="achievement-name">${ach.name}</div>
+                        <div class="achievement-description">${ach.desc}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function selectMode(mode) {
+            gameMode = mode;
+            document.querySelectorAll('.btn-mode').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.mode === mode) {
+                    btn.classList.add('active');
+                }
+            });
+        }
+
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(tabName + 'Tab').classList.add('active');
+            
+            if (tabName === 'achievements') {
+                displayAchievements();
+            } else if (tabName === 'statistics') {
+                updatePlayerSelect();
+            }
+        }
+
+        function updatePlayerSelect() {
+            const select = document.getElementById('playerSelect');
+            select.innerHTML = '<option value="">-- Chọn người chơi --</option>' +
+                players.map(p => `<option value="${p.name}">${p.name}</option>`).join('');
+        }
+
+        function showPlayerStats() {
+            const playerName = document.getElementById('playerSelect').value;
+            if (!playerName) {
+                document.getElementById('statsContent').innerHTML = '';
+                return;
+            }
+            
+            const player = players.find(p => p.name === playerName);
+            if (!player) return;
+            
+            const accuracy = player.total > 0 ? ((player.correct / player.total) * 100).toFixed(1) : 0;
+            const level = player.level || 1;
+            const exp = player.exp || 0;
+            
+            document.getElementById('statsContent').innerHTML = `
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value">${player.score}</div>
+                        <div class="stat-label">Tổng Điểm</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">${level}</div>
+                        <div class="stat-label">Cấp Độ</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">${exp}</div>
+                        <div class="stat-label">Kinh Nghiệm</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">${player.correct}</div>
+                        <div class="stat-label">Câu Đúng</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">${player.total}</div>
+                        <div class="stat-label">Tổng Câu</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">${accuracy}%</div>
+                        <div class="stat-label">Độ Chính Xác</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">${player.bestStreak}</div>
+                        <div class="stat-label">Chuỗi Tốt Nhất</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">${(player.achievements || []).length}</div>
+                        <div class="stat-label">Thành Tựu</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function exportData() {
+            const data = {
+                players: players,
+                exportDate: new Date().toISOString(),
+                version: '1.0'
+            };
+            
+            const dataStr = JSON.stringify(data, null, 2);
+            const blob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `math-game-backup-${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            
+            URL.revokeObjectURL(url);
+            alert('✅ Dữ liệu đã được xuất thành công!');
+        }
+
+        function importData(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    
+                    if (!data.players || !Array.isArray(data.players)) {
+                        throw new Error('Invalid data format');
+                    }
+                    
+                    if (confirm('⚠️ Nhập dữ liệu sẽ GHI ĐÈ lên dữ liệu hiện tại. Bạn có chắc chắn?')) {
+                        players = data.players;
+                        savePlayers();
+                        updateLeaderboard();
+                        alert('✅ Dữ liệu đã được nhập thành công!');
+                    }
+                } catch (error) {
+                    alert('❌ Lỗi: File không hợp lệ!');
+                }
+            };
+            reader.readAsText(file);
+            event.target.value = '';
+        }
+
+        function clearAllData() {
+            if (confirm('⚠️ BẠN CHẮC CHẮN MUỐN XÓA TOÀN BỘ DỮ LIỆU?\n\nHành động này KHÔNG THỂ HOÀN TÁC!')) {
+                if (confirm('⚠️⚠️⚠️ XÁC NHẬN LẦN CUỐI!\n\nTất cả tiến độ, điểm số, thành tựu sẽ bị xóa vĩnh viễn!')) {
+                    localStorage.removeItem('mathGamePlayers');
+                    players = [];
+                    updateLeaderboard();
+                    alert('✅ Đã xóa toàn bộ dữ liệu!');
+                }
+            }
+        }
+
+        function loadPlayers() {
+            const saved = localStorage.getItem('mathGamePlayers');
+            if (saved) {
+                players = JSON.parse(saved);
+            }
+            
+            const savedSound = localStorage.getItem('soundEnabled');
+            if (savedSound !== null) {
+                soundEnabled = savedSound === 'true';
+                document.getElementById('soundToggle').textContent = soundEnabled ? '🔊' : '🔇';
+            }
+            
+            updateLeaderboard();
+        }
+
+        function savePlayers() {
+            localStorage.setItem('mathGamePlayers', JSON.stringify(players));
+        }
+
+        function updateLeaderboard() {
+            const list = document.getElementById('leaderboardList');
+            if (players.length === 0) {
+                list.innerHTML = '<p style="color: rgba(255,255,255,0.6); text-align: center;">Chưa có người chơi nào</p>';
+                return;
+            }
+
+            const sorted = [...players].sort((a, b) => b.score - a.score);
+            list.innerHTML = sorted.map((player, index) => {
+                const rankEmoji = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : index + 1;
+                const rankClass = index === 0 ? 'gold' : index === 1 ? 'silver' : index === 2 ? 'bronze' : '';
+                const level = player.level || 1;
+                return `
+                    <div class="leaderboard-item ${rankClass}">
+                        <div class="rank">${rankEmoji}</div>
+                        <div class="player-info">
+                            <div class="player-name">${player.name} <span style="font-size: 0.8em; color: #c084fc;">Lv.${level}</span></div>
+                            <div class="player-stats">Đúng: ${player.correct}/${player.total} | Chuỗi: ${player.bestStreak} 🔥 | Thành tựu: ${(player.achievements || []).length}</div>
+                        </div>
+                        <div class="score">${player.score}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function startGame() {
+            const name = document.getElementById('playerNameInput').value.trim();
+            if (!name) {
+                alert('Vui lòng nhập tên!');
+                return;
+            }
+
+            let player = players.find(p => p.name === name);
+            if (!player) {
+                player = {
+                    name: name,
+                    score: 0,
+                    correct: 0,
+                    total: 0,
+                    bestStreak: 0,
+                    level: 1,
+                    exp: 0,
+                    achievements: []
+                };
+                players.push(player);
+                savePlayers();
+            }
+
+            currentPlayer = player;
+            streak = 0;
+            document.getElementById('homeScreen').classList.add('hidden');
+            document.getElementById('gameScreen').classList.remove('hidden');
+            document.getElementById('currentPlayerName').textContent = name;
+            updateScore();
+            updateLevelDisplay();
+            nextQuestion();
+        }
+
+        function getRandomQuestion() {
+    if (gameMode === 'super') {
+        startSuperEssay();
+        return null; // Không cần return vì đã xử lý trong startSuperEssay()
+    } else if (gameMode === 'multiple') {
+        return multipleChoiceQuestions[Math.floor(Math.random() * multipleChoiceQuestions.length)];
+    } else if (gameMode === 'essay') {
+        return essayQuestions[Math.floor(Math.random() * essayQuestions.length)];
+    } else {
+        const allQuestions = [...multipleChoiceQuestions, ...essayQuestions];
+        return allQuestions[Math.floor(Math.random() * allQuestions.length)];
+    }
+}
+
+        function nextQuestion() {
+    if (gameMode === 'super') {
+        startSuperEssay();
+        return;
+    }
+    
+    currentQuestion = getRandomQuestion();
+            selectedAnswer = null;
+            showResult = false;
+
+            document.getElementById('questionCategory').textContent = currentQuestion.category;
+            document.getElementById('questionText').textContent = currentQuestion.question;
+            
+            if (currentQuestion.type === 'essay') {
+                document.getElementById('questionType').textContent = '✍️ Tự Luận';
+                document.getElementById('multipleChoiceContainer').classList.add('hidden');
+                document.getElementById('essayContainer').classList.remove('hidden');
+                document.getElementById('essayInput').value = '';
+            } else {
+                document.getElementById('questionType').textContent = '✅ Trắc Nghiệm';
+                document.getElementById('essayContainer').classList.add('hidden');
+                document.getElementById('multipleChoiceContainer').classList.remove('hidden');
+                
+                const optionsContainer = document.getElementById('optionsContainer');
+                optionsContainer.innerHTML = currentQuestion.options.map((option, index) => `
+                    <button class="option-btn" onclick="selectAnswer(${index})">
+                        <span style="font-weight: bold; margin-right: 10px;">${String.fromCharCode(65 + index)}.</span>
+                        ${option}
+                    </button>
+                `).join('');
+            }
+
+            document.getElementById('resultBox').classList.add('hidden');
+            document.getElementById('nextBtn').classList.add('hidden');
+        }
+
+        function insertSymbol(symbol) {
+            const textarea = document.getElementById('essayInput');
+            const start = textarea.selectionStart;
+            const end = textarea.selectionEnd;
+            const text = textarea.value;
+            
+            const newText = text.substring(0, start) + symbol + text.substring(end);
+            textarea.value = newText;
+            
+            const newCursorPos = start + symbol.length;
+            textarea.setSelectionRange(newCursorPos, newCursorPos);
+            textarea.focus();
+        }
+
+        function normalizeAnswer(answer) {
+            return answer.toLowerCase()
+                .replace(/\s+/g, '')
+                .replace(/degrees?/gi, '')
+                .replace(/độ/g, '')
+                .replace(/\*/g, '')
+                .replace(/sqrt/g, '√')
+                .replace(/\(/g, '')
+                .replace(/\)/g, '');
+        }
+
+        function checkEssayAnswer(userAnswer) {
+            const normalized = normalizeAnswer(userAnswer);
+            
+            for (let correctAns of currentQuestion.correctAnswers) {
+                if (normalizeAnswer(correctAns) === normalized) {
+                    return { correct: true, partial: false };
+                }
+            }
+            
+            for (let correctAns of currentQuestion.correctAnswers) {
+                const normCorrect = normalizeAnswer(correctAns);
+                if (normalized.includes(normCorrect) || normCorrect.includes(normalized)) {
+                    return { correct: false, partial: true };
+                }
+            }
+            
+            return { correct: false, partial: false };
+        }
+
+        function submitEssay() {
+            if (showResult) return;
+            
+            const userAnswer = document.getElementById('essayInput').value.trim();
+            if (!userAnswer) {
+                alert('Vui lòng nhập câu trả lời!');
+                return;
+            }
+
+            showResult = true;
+            const result = checkEssayAnswer(userAnswer);
+            
+            if (result.correct) {
+                streak++;
+                const points = 15 + Math.min(streak * 5, 50);
+                currentPlayer.score += points;
+                currentPlayer.correct++;
+                addExp(15);
+                playCorrectSound();
+            } else if (result.partial) {
+                streak = Math.max(0, streak - 1);
+                currentPlayer.score += 5;
+                addExp(5);
+            } else {
+                streak = 0;
+                playIncorrectSound();
+            }
+
+            currentPlayer.total++;
+            currentPlayer.bestStreak = Math.max(currentPlayer.bestStreak, streak);
+            checkAchievements();
+            savePlayers();
+            updateScore();
+
+            const resultBox = document.getElementById('resultBox');
+            let resultClass = result.correct ? 'correct' : result.partial ? 'partial' : 'incorrect';
+            let resultTitle = result.correct ? '✅ Chính xác!' : result.partial ? '⚠️ Gần đúng!' : '❌ Sai rồi!';
+            
+            resultBox.className = 'result-box ' + resultClass;
+            resultBox.innerHTML = `
+                <div class="result-title">${resultTitle}</div>
+                <div class="your-answer"><strong>Câu trả lời của bạn:</strong> ${userAnswer}</div>
+                <div class="result-explanation">${currentQuestion.explanation}</div>
+                ${result.correct && streak > 0 ? `<div class="bonus-points">🔥 Chuỗi ${streak} câu đúng! +${15 + Math.min(streak * 5, 50)} điểm | +15 EXP</div>` : ''}
+                ${result.partial ? `<div class="bonus-points">+5 điểm cho câu trả lời gần đúng | +5 EXP</div>` : ''}
+            `;
+            resultBox.classList.remove('hidden');
+            document.getElementById('nextBtn').classList.remove('hidden');
+        }
+
+        function selectAnswer(index) {
+            if (showResult) return;
+
+            selectedAnswer = index;
+            showResult = true;
+            const isCorrect = index === currentQuestion.correct;
+
+            if (isCorrect) {
+                streak++;
+                playCorrectSound();
+            } else {
+                streak = 0;
+                playIncorrectSound();
+            }
+
+            if (isCorrect) {
+                const points = 10 + Math.min(streak * 5, 50);
+                currentPlayer.score += points;
+                currentPlayer.correct++;
+                addExp(10);
+            }
+            currentPlayer.total++;
+            currentPlayer.bestStreak = Math.max(currentPlayer.bestStreak, streak);
+            checkAchievements();
+            savePlayers();
+            updateScore();
+
+            const buttons = document.querySelectorAll('.option-btn');
+            buttons.forEach((btn, i) => {
+                btn.disabled = true;
+                btn.classList.add('disabled');
+                if (i === currentQuestion.correct) {
+                    btn.classList.add('correct');
+                } else if (i === selectedAnswer) {
+                    btn.classList.add('incorrect');
+                }
+            });
+
+            const resultBox = document.getElementById('resultBox');
+            resultBox.className = 'result-box ' + (isCorrect ? 'correct' : 'incorrect');
+            resultBox.innerHTML = `
+                <div class="result-title">${isCorrect ? '✅ Chính xác!' : '❌ Sai rồi!'}</div>
+                <div class="result-explanation">${currentQuestion.explanation}</div>
+                ${isCorrect && streak > 0 ? `<div class="bonus-points">🔥 Chuỗi ${streak} câu đúng! +${10 + Math.min(streak * 5, 50)} điểm | +10 EXP</div>` : ''}
+            `;
+            resultBox.classList.remove('hidden');
+            document.getElementById('nextBtn').classList.remove('hidden');
+        }
+
+        function updateScore() {
+            document.getElementById('currentScore').textContent = currentPlayer.score + ' điểm';
+            const streakBadge = document.getElementById('streakBadge');
+            if (streak > 0) {
+                streakBadge.classList.remove('hidden');
+                document.getElementById('streakCount').textContent = 'x' + streak;
+            } else {
+                streakBadge.classList.add('hidden');
+            }
+        }
+
+        function goHome() {
+            document.getElementById('homeScreen').classList.remove('hidden');
+            document.getElementById('gameScreen').classList.add('hidden');
+            updateLeaderboard();
+            displayAchievements();
+        }
+
+        loadPlayers();
+
+        document.getElementById('playerNameInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                startGame();
+            }
+        });
+
+        document.getElementById('essayInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && e.ctrlKey) {
+                submitEssay();
+            }
+        });
+    </script>
+    <script src="super-essay.js"></script>
+</body>
+</html>
